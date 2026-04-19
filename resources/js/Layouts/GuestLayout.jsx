@@ -80,13 +80,6 @@ export default function Guest({ children }) {
                             <a 
                                 href="#survei" 
                                 onClick={(e) => scrollToSection(e, '#survei')} 
-                                className="px-5 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-200"
-                            >
-                                Login
-                            </a>
-                            <a 
-                                href="#survei" 
-                                onClick={(e) => scrollToSection(e, '#survei')} 
                                 className="px-5 py-2.5 text-sm font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-all duration-200"
                             >
                                 Isi Survei

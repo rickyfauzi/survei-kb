@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiLock, FiMail } from 'react-icons/fi';
+import { FiArrowLeft, FiLock, FiMail, FiEye, FiEyeOff } from 'react-icons/fi';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,6 +13,8 @@ export default function Login({ status, canResetPassword }) {
         password: '',
         remember: false,
     });
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
@@ -106,14 +108,21 @@ export default function Login({ status, canResetPassword }) {
                                 </div>
                                 <TextInput
                                     id="password"
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     value={data.password}
-                                    className="pl-11 block w-full rounded-2xl border-slate-200 focus:border-primary-500 focus:ring-primary-500 bg-slate-50 py-3 shadow-sm transition-all"
+                                    className="pl-11 pr-12 block w-full rounded-2xl border-slate-200 focus:border-primary-500 focus:ring-primary-500 bg-slate-50 py-3 shadow-sm transition-all"
                                     autoComplete="current-password"
                                     onChange={(e) => setData('password', e.target.value)}
                                     placeholder="••••••••"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-primary-500 transition-colors"
+                                >
+                                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                </button>
                             </div>
                             <InputError message={errors.password} className="mt-2 ml-1" />
                         </div>
