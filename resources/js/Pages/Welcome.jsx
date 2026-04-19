@@ -720,7 +720,7 @@ export default function Welcome({
             ════════════════════════════════════════════════════════ */}
             <section
                 id="beranda"
-                className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center pt-36 pb-12 md:pt-32 md:pb-16 overflow-hidden bg-white"
+                className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-start md:justify-center pt-28 pb-12 md:pt-32 md:pb-16 overflow-hidden bg-white"
             >
                 {/* Background Grid Pattern with Pink/Indigo Glow */}
                 <div className="absolute inset-0 h-full w-full bg-white pointer-events-none">
