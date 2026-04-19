@@ -38,6 +38,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     
     // Gallery Management
     Route::resource('gallery', AdminGalleryController::class)->only(['index', 'store', 'destroy']);
+
+    // Team Management
+    Route::resource('teams', TeamController::class)->except(['create', 'show', 'edit']);
 });
 
 Route::middleware('auth')->group(function () {

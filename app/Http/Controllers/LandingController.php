@@ -35,12 +35,14 @@ class LandingController extends Controller
         }
 
         $galleries = Gallery::latest()->take(12)->get();
+        $teams = \App\Models\Team::where('is_active', true)->orderBy('order')->get();
 
         return Inertia::render('Welcome', [
             'totalResponden' => $totalResponden,
             'rataKepuasan' => round($rataKepuasan, 1),
             'persentasePuas' => $persentasePuas > 0 ? $persentasePuas : 0,
             'galleries' => $galleries,
+            'teams' => $teams,
         ]);
     }
 }

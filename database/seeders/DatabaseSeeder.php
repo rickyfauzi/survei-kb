@@ -42,5 +42,22 @@ class DatabaseSeeder extends Seeder
                 'order' => $index + 1,
             ]);
         }
+
+        // Default Teams
+        $teams = [
+            ['name' => 'Angela T. Vigil', 'role' => 'Kepala Balai KB'],
+            ['name' => 'Frank A. Mitchell', 'role' => 'Penyuluh Lapangan'],
+            ['name' => 'Susan D. Lunsford', 'role' => 'Administrasi Umum'],
+            ['name' => 'Dennis A. Pruitt', 'role' => 'Staf Pelayanan'],
+        ];
+
+        foreach ($teams as $index => $member) {
+            \App\Models\Team::create([
+                'name' => $member['name'],
+                'role' => $member['role'],
+                'order' => $index + 1,
+                'is_active' => true,
+            ]);
+        }
     }
 }

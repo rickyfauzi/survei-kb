@@ -555,6 +555,7 @@ export default function Welcome({
     rataKepuasan = 89.4,
     persentasePuas = 94,
     galleries = [],
+    teams = [],
 }) {
     const [openFaq, setOpenFaq] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -1644,9 +1645,90 @@ export default function Welcome({
                 </div>
             </section>
 
+            {/* ══════════════════════════════════════════════════════
+                13. TEAM — Clean & Professional Cards
+            ══════════════════════════════════════════════════════ */}
+            <section className="py-24 bg-slate-50 overflow-hidden relative">
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="text-center mb-20">
+                        <FadeUp>
+                            <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.4em] mb-4 block">
+                                OUR TEAM
+                            </span>
+                            <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6 tracking-tighter">
+                                Meet Our Team Members
+                            </h2>
+                            <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
+                                Individu berdedikasi tinggi yang berkomitmen untuk memberikan pelayanan KB terbaik & pengabdian tulus bagi masyarakat.
+                            </p>
+                        </FadeUp>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {teams.length > 0 ? (
+                            teams.map((member, i) => (
+                                <FadeUp key={member.id} delay={i * 0.1}>
+                                    <div className="group bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                                        <div className="aspect-[4/5] overflow-hidden relative">
+                                            <img 
+                                                src={member.photo_url} 
+                                                alt={member.name}
+                                                className="w-full h-full object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        </div>
+                                        
+                                        <div className="p-6 flex items-center justify-between border-t border-slate-100">
+                                            <div>
+                                                <h4 className="text-slate-900 font-bold text-lg mb-0.5 tracking-tight group-hover:text-amber-600 transition-colors uppercase">
+                                                    {member.name}
+                                                </h4>
+                                                <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-none">
+                                                    {member.role}
+                                                </p>
+                                            </div>
+                                            
+                                            <div className="relative group/share">
+                                                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover/share:bg-amber-100 group-hover/share:text-amber-600 transition-all cursor-pointer">
+                                                    <Icons.Share size={16} />
+                                                </div>
+                                                
+                                                <div className="absolute bottom-full right-0 mb-4 flex gap-2 opacity-0 translate-y-2 pointer-events-none group-hover/share:opacity-100 group-hover/share:translate-y-0 group-hover/share:pointer-events-auto transition-all duration-300">
+                                                    {member.instagram && (
+                                                        <a href={member.instagram} target="_blank" className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors">
+                                                            <Icons.Activity size={12} />
+                                                        </a>
+                                                    )}
+                                                    {member.twitter && (
+                                                        <a href={member.twitter} target="_blank" className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors">
+                                                            <Icons.Mail size={12} />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </FadeUp>
+                            ))
+                        ) : (
+                            [1,2,3,4].map(i => (
+                                <FadeUp key={i} delay={i * 0.1}>
+                                    <div className="bg-white rounded-3xl p-8 border border-dashed border-slate-300 flex flex-col items-center justify-center h-48 sm:h-auto text-center grayscale opacity-50">
+                                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                            <Icons.Users size={24} />
+                                        </div>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Team Member Slot</p>
+                                    </div>
+                                </FadeUp>
+                            ))
+                        )}
+                    </div>
+                </div>
+            </section>
+
 
             {/* ══════════════════════════════════════════════════════
-                13. FAQ — Clean Accordion Style
+                14. FAQ — Clean Accordion Style
             ════════════════════════════════════════════════════════ */}
             <section id="faq" className="py-24 sm:py-32 bg-white">
                 <div className="max-w-3xl mx-auto px-6 sm:px-8">
