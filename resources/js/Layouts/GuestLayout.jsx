@@ -181,16 +181,18 @@ export default function Guest({ children }) {
                 <div className="max-w-7xl mx-auto px-8 sm:px-10 lg:px-12 py-24 relative z-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
                         <div className="lg:col-span-1">
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-12 h-12 bg-amber-600 text-white rounded-2xl flex items-center justify-center font-bold text-xl shadow-xl shadow-amber-100">
-                                    KB
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-12 h-12 flex items-center justify-center">
+                                    <img
+                                        src="/1000492763-removebg-preview.png"
+                                        alt="Balai KB Argapura"
+                                        className="w-full h-full object-contain"
+                                    />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-slate-900 text-xl tracking-tighter leading-none mb-1">
-                                        BALAI KB{" "}
-                                        <span className="text-amber-600">
-                                            ARGAPURA
-                                        </span>
+                                    <h3 className="font-extrabold text-xl text-slate-900 tracking-tight leading-none mb-1">
+                                        Balai PKB{" "}
+                                        <span className="text-amber-600">Argapura</span>
                                     </h3>
                                     <p className="text-[10px] font-bold text-amber-500 tracking-[0.3em] uppercase">
                                         Bangga Kencana
