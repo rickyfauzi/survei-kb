@@ -46,6 +46,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Reports
     Route::get('reports', [ReportController::class, 'index'])->name('admin.reports.index');
+    Route::get('reports/full', [ReportController::class, 'full'])->name('admin.reports.full');
 });
 
 Route::middleware('auth')->group(function () {

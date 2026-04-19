@@ -56,4 +56,31 @@ class ReportController extends Controller
             'filters' => $request->only(['month']),
         ]);
     }
+
+    public function full()
+    {
+        $responses = Response::with(['answers.question'])->orderBy('created_at', 'desc')->get()->map(function ($response) {
+            return [
+                'id' => $response->id,
+                'nama' => $response->nama,
+                'no_wa' => $response->no_wa,
+                'lokasi' => $response->lokasi,
+                'tanggal' => $response->created_at->format('d-m-Y H:i'),
+                'answers' => $response->answers->map(function ($a) {
+                    return [
+                        'q' => $a->question->question ?? 'N/A',
+                        's' => $a->score
+                    ];
+                }),
+                'kritik_saran' => $response->kritik_saran,
+            ];
+        });
+
+        $questions = \App\Models\Question::orderBy('order')->pluck('question');
+
+        return Inertia::render('Admin/FullReport', [
+            'responses' => $responses,
+            'questions' => $questions,
+        ]);
+    }
 }

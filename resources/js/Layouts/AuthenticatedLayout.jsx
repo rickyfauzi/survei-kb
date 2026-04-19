@@ -25,7 +25,8 @@ export default function AuthenticatedLayout({ header, children }) {
         { name: 'Dashboard', route: 'admin.dashboard', icon: <FiHome size={20} /> },
         { name: 'Kuesioner', route: 'admin.questions.index', icon: <FiList size={20} /> },
         { name: 'Data Responden', route: 'admin.responses.index', icon: <FiUsers size={20} /> },
-        { name: 'Laporan', route: 'admin.reports.index', icon: <FiList size={20} /> },
+        { name: 'Statistik', route: 'admin.reports.index', icon: <FiList size={20} /> },
+        { name: 'Laporan Lengkap', route: 'admin.reports.full', icon: <FiList size={20} /> },
         { name: 'Manajemen Tim', route: 'admin.teams.index', icon: <FiUsers size={20} /> },
         { name: 'Galeri', route: 'admin.gallery.index', icon: <FiImage size={20} /> },
     ];
