@@ -98,12 +98,7 @@ const Icons = {
             d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4zM8 2v16M16 6v16"
         />
     ),
-    X: (props) => (
-        <Icon
-            {...props}
-            d="M18 6L6 18M6 6l12 12"
-        />
-    ),
+    X: (props) => <Icon {...props} d="M18 6L6 18M6 6l12 12" />,
     Baby: (props) => (
         <Icon
             {...props}
@@ -147,6 +142,11 @@ const Icons = {
         <Icon
             {...props}
             d="M7 11V7a5 5 0 0 1 10 0v4M8 11h8a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"
+        />
+    Share: (props) => (
+        <Icon
+            {...props}
+            d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"
         />
     ),
 };
