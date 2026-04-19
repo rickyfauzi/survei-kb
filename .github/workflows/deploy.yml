@@ -35,7 +35,6 @@ jobs:
             git ls-files >> changed_files.txt
           fi
           cat changed_files.txt
-
       - name: 📂 Sync Files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
