@@ -3,192 +3,151 @@ import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     FiHome, FiList, FiUsers, FiImage, FiSettings, 
-    FiLogOut, FiMenu, FiX, FiSearch, FiBell, FiChevronRight
+    FiLogOut, FiMenu, FiX, FiSearch, FiBell, FiChevronDown, FiGrid, FiBarChart2
 } from 'react-icons/fi';
 import Dropdown from '@/Components/Dropdown';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 1024) setSidebarOpen(true);
             else setSidebarOpen(false);
         };
-        handleResize(); // Initial check
+        handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const menuItems = [
-        { name: 'Dashboard', route: 'admin.dashboard', icon: <FiHome size={20} /> },
-        { name: 'Kuesioner', route: 'admin.questions.index', icon: <FiList size={20} /> },
-        { name: 'Data Responden', route: 'admin.responses.index', icon: <FiUsers size={20} /> },
-        { name: 'Statistik', route: 'admin.reports.index', icon: <FiList size={20} /> },
-        { name: 'Laporan Lengkap', route: 'admin.reports.full', icon: <FiList size={20} /> },
-        { name: 'Manajemen Tim', route: 'admin.teams.index', icon: <FiUsers size={20} /> },
-        { name: 'Galeri', route: 'admin.gallery.index', icon: <FiImage size={20} /> },
+        { name: 'Dashboard', route: 'admin.dashboard', icon: <FiHome size={17} /> },
+        { name: 'Kuesioner', route: 'admin.questions.index', icon: <FiList size={17} /> },
+        { name: 'Data Responden', route: 'admin.responses.index', icon: <FiUsers size={17} /> },
+        { name: 'Statistik', route: 'admin.reports.index', icon: <FiBarChart2 size={17} /> },
+        { name: 'Laporan Lengkap', route: 'admin.reports.full', icon: <FiGrid size={17} /> },
+        { name: 'Manajemen Tim', route: 'admin.teams.index', icon: <FiUsers size={17} /> },
+        { name: 'Galeri', route: 'admin.gallery.index', icon: <FiImage size={17} /> },
     ];
 
     const isCurrentRoute = (routeName) => route().current(routeName) || route().current(routeName.replace('.index', '.*'));
 
     return (
-        <div className="min-h-screen flex font-sans text-slate-300" style={{ backgroundColor: '#0B0F19' }}>
+        <div className="min-h-screen flex font-['Instrument_Sans',_sans-serif] bg-[#f3f3f9] text-slate-700">
             
-            {/* MOBILE OVERLAY */}
+            {/* Mobile Overlay */}
             <AnimatePresence>
                 {sidebarOpen && window.innerWidth < 1024 && (
-                    <motion.div 
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        onClick={() => setSidebarOpen(false)}
-                        className="fixed inset-0 bg-[#0B0F19]/80 backdrop-blur-sm z-40 lg:hidden"
-                    />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black/30 z-40 lg:hidden" />
                 )}
             </AnimatePresence>
 
-            {/* SIDEBAR - DASHDARK X STYLE */}
+            {/* Sidebar */}
             <motion.aside 
                 initial={false}
-                animate={{ 
-                    x: sidebarOpen ? 0 : '-100%',
-                    width: '260px'
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed lg:relative inset-y-0 left-0 bg-[#111827] border-r border-slate-800/80 z-50 flex flex-col shadow-2xl lg:shadow-none"
+                animate={{ x: sidebarOpen ? 0 : '-100%', width: '250px' }}
+                transition={{ type: "spring", stiffness: 400, damping: 40 }}
+                className="fixed lg:relative inset-y-0 left-0 z-50 flex flex-col print:hidden"
+                style={{ minWidth: '250px', background: 'linear-gradient(to bottom, #405189, #2b3a6e)' }}
             >
-                {/* Brand Logo */}
-                <div className="h-20 flex items-center justify-between px-6 shrink-0">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded shrink-0 bg-blue-500 flex items-center justify-center">
-                            <div className="w-4 h-4 bg-white rounded-sm rotate-45"></div>
-                        </div>
-                        <span className="font-bold text-xl tracking-wide text-white">
-                            Survei<span className="text-blue-500">App</span>
-                        </span>
-                    </div>
-                    <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-slate-400 hover:text-white">
-                        <FiX size={24} />
-                    </button>
+                {/* Logo */}
+                <div className="h-[70px] flex items-center px-6 shrink-0">
+                    <Link href="/" className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 bg-white/20 rounded-sm flex items-center justify-center text-white text-[11px] font-black">KB</div>
+                        <span className="font-bold text-[15px] text-white tracking-tight">BALAI KB <span className="font-normal text-white/60 text-xs">Argapura</span></span>
+                    </Link>
+                    <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto text-white/60 hover:text-white"><FiX size={20} /></button>
                 </div>
 
-                {/* Navbar Items */}
-                <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
-                    {/* Search Mockup */}
-                    <div className="relative mb-6">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-                        <input type="text" placeholder="Search for..." className="w-full bg-[#1F2937] border border-slate-700/50 rounded-lg py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-slate-200 placeholder-slate-500 transition-colors" />
-                    </div>
-
+                {/* Menu */}
+                <nav className="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto sidebar-scroll">
+                    <p className="text-[10px] font-semibold text-white/40 uppercase tracking-widest px-3 mb-3 mt-2">Menu</p>
                     {menuItems.map((item) => {
                         const active = isCurrentRoute(item.route);
                         return (
-                            <Link 
-                                key={item.name} 
-                                href={route(item.route)}
-                                className={`
-                                    flex items-center justify-between px-3 py-3 rounded-lg font-medium transition-all duration-200 group
-                                    ${active 
-                                        ? 'bg-blue-600/10 text-blue-500 relative' 
-                                        : 'text-slate-400 hover:bg-[#1F2937] hover:text-slate-200'
-                                    }
-                                `}
-                            >
-                                {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-500 rounded-r-full"></div>}
-                                <div className="flex items-center gap-3">
-                                    <span className={active ? 'text-blue-500' : 'text-slate-500 group-hover:text-slate-300'}>{item.icon}</span>
-                                    {item.name}
-                                </div>
-                                <FiChevronRight size={14} className={active ? 'text-blue-500' : 'text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity'} />
+                            <Link key={item.name} href={route(item.route)}
+                                className={`flex items-center gap-3 px-3 py-[9px] text-[13px] rounded-sm transition-all ${
+                                    active ? 'bg-white/15 text-white font-semibold' : 'text-white/60 hover:text-white hover:bg-white/8'
+                                }`}>
+                                <span className={active ? 'text-white' : 'text-white/50'}>{item.icon}</span>
+                                {item.name}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* Footer Sidebar */}
-                <div className="p-4 border-t border-slate-800/80">
+                {/* User */}
+                <div className="p-4 border-t border-white/10">
                     <Dropdown>
                         <Dropdown.Trigger>
-                            <button className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-[#1F2937] transition-colors group">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 rounded-full bg-[#374151] flex items-center justify-center font-bold text-white relative overflow-hidden shrink-0 border border-slate-600">
-                                        <img src={`https://ui-avatars.com/api/?name=${user.name}&background=1F2937&color=ffffff&bold=true`} alt="Avatar" />
-                                    </div>
-                                    <div className="text-left max-w-[120px]">
-                                        <p className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">{user.name}</p>
-                                        <p className="text-xs text-slate-500 truncate">{user.email}</p>
-                                    </div>
+                            <button className="w-full flex items-center gap-3 px-2 py-2 rounded-sm hover:bg-white/10 transition-all">
+                                <img src={`https://ui-avatars.com/api/?name=${user.name}&background=ffffff&color=405189&bold=true&size=32`} alt="" className="w-8 h-8 rounded-sm" />
+                                <div className="text-left flex-1 min-w-0">
+                                    <p className="text-[12px] font-semibold text-white truncate">{user.name}</p>
+                                    <p className="text-[10px] text-white/40">Administrator</p>
                                 </div>
-                                <FiSettings size={16} className="text-slate-500 group-hover:text-slate-300" />
+                                <FiChevronDown size={14} className="text-white/40 shrink-0" />
                             </button>
                         </Dropdown.Trigger>
-                        <Dropdown.Content align="top" width="w-56" contentClasses="bg-[#1F2937] border border-slate-700 py-1">
-                            <Dropdown.Link href={route('profile.edit')} className="flex items-center gap-2 py-2 text-slate-200 hover:bg-[#374151] hover:text-white">
-                                <FiSettings size={16}/> Settings
+                        <Dropdown.Content align="top" width="w-48" contentClasses="bg-white border border-slate-200 rounded-sm py-1 shadow-lg mb-2">
+                            <Dropdown.Link href={route('profile.edit')} className="flex items-center gap-2 py-2 px-3 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                <FiSettings size={14}/> Pengaturan
                             </Dropdown.Link>
-                            <Dropdown.Link href={route('home')} className="flex items-center gap-2 py-2 text-slate-200 hover:bg-[#374151] hover:text-white">
-                                <FiHome size={16}/> Public View
+                            <Dropdown.Link href={route('home')} className="flex items-center gap-2 py-2 px-3 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                <FiHome size={14}/> Halaman Publik
                             </Dropdown.Link>
-                            <div className="border-t border-slate-700 my-1"></div>
-                            <Dropdown.Link href={route('logout')} method="post" as="button" className="flex items-center gap-2 text-red-400 hover:bg-slate-800 py-2 font-medium w-full text-left">
-                                <FiLogOut size={16}/> Logout
+                            <div className="border-t border-slate-100 my-1"></div>
+                            <Dropdown.Link href={route('logout')} method="post" as="button" className="flex items-center gap-2 py-2 px-3 text-xs text-red-600 hover:bg-red-50 w-full text-left">
+                                <FiLogOut size={14}/> Keluar
                             </Dropdown.Link>
                         </Dropdown.Content>
                     </Dropdown>
                 </div>
             </motion.aside>
 
-            {/* MAIN CONTENT AREA */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+            {/* Main */}
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
                 
-                {/* Header Topbar */}
-                <header className="h-20 px-6 sm:px-8 flex items-center justify-between shrink-0 bg-[#0B0F19]/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-800/80">
+                {/* Header */}
+                <header className="h-[70px] px-6 flex items-center justify-between shrink-0 bg-white border-b border-slate-200/80 sticky top-0 z-20 print:hidden shadow-sm">
                     <div className="flex items-center gap-4">
-                        <button 
-                            onClick={() => setSidebarOpen(true)}
-                            className="lg:hidden p-2 -ml-2 text-slate-400 hover:text-white rounded-lg hover:bg-[#1F2937]"
-                        >
-                            <FiMenu size={24} />
-                        </button>
-                        {header && (
-                            <div className="font-semibold text-xl text-white tracking-wide">
-                                {header}
-                            </div>
-                        )}
+                        <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-sm"><FiMenu size={20} /></button>
+                        {header && <div className="text-base font-semibold text-slate-800">{typeof header === 'string' ? header : header}</div>}
                     </div>
-                    
-                    <div className="flex items-center gap-4">
-                        <button className="relative p-2 text-slate-400 hover:text-white rounded-full hover:bg-[#1F2937] transition-colors">
-                            <FiBell size={20} />
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#0B0F19]"></span>
+                    <div className="flex items-center gap-2">
+                        <div className="hidden md:flex relative">
+                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                            <input type="text" placeholder="Cari data..." className="bg-slate-50 border border-slate-200 px-8 py-[7px] text-[13px] focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400 w-52 rounded-sm placeholder:text-slate-400" />
+                        </div>
+                        <button className="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-sm">
+                            <FiBell size={17} />
+                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                         </button>
                     </div>
                 </header>
 
-                {/* Page Content */}
-                <main className="flex-1 overflow-y-auto px-4 sm:px-8 pb-10 custom-scrollbar">
-                    <div className="h-full pt-4 max-w-[1400px]">
-                        {children}
+                {/* Content */}
+                <main className="flex-1 overflow-y-auto p-6">
+                    <div className="max-w-[1400px] mx-auto">
+                        <AnimatePresence mode="wait">
+                            <motion.div key={usePage().url} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
+                                {children}
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
                 </main>
             </div>
 
-            {/* Custom CSS for slim scrollbars matched to dark theme */}
             <style jsx global>{`
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                    height: 6px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background-color: #374151;
-                    border-radius: 10px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background-color: #4B5563;
-                }
+                .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+                .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+                .card { background: #fff; border: 1px solid #e9ebec; border-radius: 4px; box-shadow: 0 1px 2px rgba(56,65,74,0.03); }
+                .card-header { padding: 16px 16px 0; }
+                .card-body { padding: 16px; }
+                @media print { .print\\:hidden { display: none !important; } }
             `}</style>
         </div>
     );

@@ -503,8 +503,12 @@ const ImageModal = ({ isOpen, onClose, image, title }) => {
                             className="w-full h-full max-h-[75vh] object-contain"
                         />
                         <div className="p-8 bg-gradient-to-t from-slate-950 to-slate-950/50">
-                            <h3 className="text-white font-bold text-2xl tracking-tight">{title}</h3>
-                            <p className="text-slate-400 text-sm mt-1">Dokumentasi Kegiatan Balai KB Argapura</p>
+                            <h3 className="text-white font-bold text-2xl tracking-tight">
+                                {title}
+                            </h3>
+                            <p className="text-slate-400 text-sm mt-1">
+                                Dokumentasi Kegiatan Balai KB Argapura
+                            </p>
                         </div>
                     </div>
                 </motion.div>
@@ -513,7 +517,12 @@ const ImageModal = ({ isOpen, onClose, image, title }) => {
     );
 };
 
-const HorizontalMarquee = ({ items, speed = 40, reverse = false, onImageClick }) => {
+const HorizontalMarquee = ({
+    items,
+    speed = 40,
+    reverse = false,
+    onImageClick,
+}) => {
     return (
         <div className="flex overflow-hidden gap-8 py-4">
             <motion.div
@@ -538,7 +547,9 @@ const HorizontalMarquee = ({ items, speed = 40, reverse = false, onImageClick })
                             className="w-full h-full object-cover transition-transform duration-1000 group-hover/card:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-2">Kegiatan</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-2">
+                                Kegiatan
+                            </p>
                             <h3 className="text-white font-bold text-lg leading-tight">
                                 {item.title}
                             </h3>
@@ -635,6 +646,14 @@ export default function Welcome({
             from: "from-sky-500",
             to: "to-sky-800",
             icon: Icons.Award,
+        },
+        {
+            abbr: "UPPKA",
+            title: "UPPKA",
+            desc: "Usaha Peningkatan Pendapatan Keluarga Akseptor untuk pemberdayaan ekonomi keluarga melalui kelompok usaha mikro mandiri.",
+            from: "from-emerald-500",
+            to: "to-emerald-800",
+            icon: Icons.Briefcase,
         },
     ];
 
@@ -765,10 +784,19 @@ export default function Welcome({
                     {/* Hero Title */}
                     <FadeUp delay={0.15}>
                         <h1 className="text-[26px] sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.3] sm:leading-[1.1] tracking-tight text-balance">
-                            Wujudkan Keluarga Sejahtera dengan <br className="hidden sm:block" />
+                            Wujudkan Keluarga Sejahtera dengan{" "}
+                            <br className="hidden sm:block" />
                             <span className="inline-flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-center mt-2 sm:mt-3">
                                 <span>Layanan KB</span>
-                                <DynamicText words={["Terpadu", "Modern", "Gratis", "Aman", "Mudah"]} />
+                                <DynamicText
+                                    words={[
+                                        "Terpadu",
+                                        "Modern",
+                                        "Gratis",
+                                        "Aman",
+                                        "Mudah",
+                                    ]}
+                                />
                             </span>
                         </h1>
                     </FadeUp>
@@ -785,7 +813,8 @@ export default function Welcome({
                                 konseling berkualitas, kontrasepsi aman, dan
                                 pembinaan keluarga.
                             </strong>{" "}
-                            Wujudkan masa depan keluarga yang lebih sehat, terencana, dan bahagia bersama tim ahli kami.
+                            Wujudkan masa depan keluarga yang lebih sehat,
+                            terencana, dan bahagia bersama tim ahli kami.
                         </p>
                     </FadeUp>
 
@@ -1084,8 +1113,8 @@ export default function Welcome({
                         <FadeUp delay={0.14}>
                             <p className="text-slate-500 text-lg">
                                 Seluruh konsultasi dan pelayanan kependudukan di
-                                Balai KB Argapura sepenuhnya gratis untuk masyarakat
-                                umum.
+                                Balai KB Argapura sepenuhnya gratis untuk
+                                masyarakat umum.
                             </p>
                         </FadeUp>
                     </div>
@@ -1114,7 +1143,7 @@ export default function Welcome({
                                 <div className="absolute bottom-6 left-6 right-6 bg-slate-900/40 backdrop-blur-md border border-white/20 rounded-2xl p-6">
                                     <div className="flex justify-between items-center">
                                         {[
-                                            { v: "8", l: "Desa Binaan" },
+                                            { v: "14", l: "Desa Binaan" },
                                             { v: "95%", l: "Cakupan KB" },
                                             { v: "42", l: "Poktan Aktif" },
                                         ].map((s, i) => (
@@ -1305,12 +1334,12 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-6 sm:px-8">
                     <div className="text-center max-w-2xl mx-auto mb-20">
                         <FadeUp>
-                            <SectionLabel>Kelompok Kegiatan</SectionLabel>
+                            <SectionLabel>Program Unggulan</SectionLabel>
                         </FadeUp>
                         <FadeUp delay={0.08}>
                             <SectionHeading className="mb-6">
-                                Bina Kelompok Masyarakat{" "}
-                                <UnderlineHighlight>TRIBINA</UnderlineHighlight>
+                                Bina Ketahanan Keluarga{" "}
+                                <UnderlineHighlight>TRIBINA & UPPKA</UnderlineHighlight>
                             </SectionHeading>
                         </FadeUp>
                         <FadeUp delay={0.14}>
@@ -1440,7 +1469,7 @@ export default function Welcome({
                                 },
                                 {
                                     label: "Cukup",
-                                        pct: 1.5,
+                                    pct: 1.5,
                                     color: "bg-amber-500",
                                 },
                                 {
@@ -1482,7 +1511,8 @@ export default function Welcome({
                         </FadeUp>
                         <FadeUp delay={0.08}>
                             <SectionHeading className="mb-6">
-                                Momen <span className="text-amber-600">Kegiatan</span>
+                                Momen{" "}
+                                <span className="text-amber-600">Kegiatan</span>
                             </SectionHeading>
                         </FadeUp>
                     </div>
@@ -1490,29 +1520,42 @@ export default function Welcome({
                     {galleries.length === 0 ? (
                         <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
                             <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                                <Icons.Map size={32} className="text-slate-300" />
+                                <Icons.Map
+                                    size={32}
+                                    className="text-slate-300"
+                                />
                             </div>
                             <p className="font-bold text-slate-800 text-lg mb-2">
                                 Belum Ada Dokumentasi
                             </p>
                             <p className="text-slate-500 text-sm max-w-xs mx-auto">
-                                Admin belum mengunggah foto kegiatan terbaru ke dalam sistem.
+                                Admin belum mengunggah foto kegiatan terbaru ke
+                                dalam sistem.
                             </p>
                         </div>
                     ) : (
                         <div className="relative overflow-hidden -mx-6 sm:-mx-8 lg:-mx-20 [mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)]">
                             <div className="space-y-4 sm:space-y-8">
-                                <HorizontalMarquee 
-                                    items={galleries.slice(0, Math.ceil(galleries.length / 2))} 
+                                <HorizontalMarquee
+                                    items={galleries.slice(
+                                        0,
+                                        Math.ceil(galleries.length / 2),
+                                    )}
                                     speed={60}
-                                    onImageClick={(item) => setSelectedImage(item)}
+                                    onImageClick={(item) =>
+                                        setSelectedImage(item)
+                                    }
                                 />
                                 {galleries.length > 1 && (
-                                    <HorizontalMarquee 
-                                        items={galleries.slice(Math.ceil(galleries.length / 2))} 
-                                        speed={80} 
+                                    <HorizontalMarquee
+                                        items={galleries.slice(
+                                            Math.ceil(galleries.length / 2),
+                                        )}
+                                        speed={80}
                                         reverse={true}
-                                        onImageClick={(item) => setSelectedImage(item)}
+                                        onImageClick={(item) =>
+                                            setSelectedImage(item)
+                                        }
                                     />
                                 )}
                             </div>
@@ -1520,10 +1563,12 @@ export default function Welcome({
                     )}
                 </div>
 
-                <ImageModal 
-                    isOpen={!!selectedImage} 
+                <ImageModal
+                    isOpen={!!selectedImage}
                     onClose={() => setSelectedImage(null)}
-                    image={selectedImage ? `/storage/${selectedImage.image}` : ""}
+                    image={
+                        selectedImage ? `/storage/${selectedImage.image}` : ""
+                    }
                     title={selectedImage?.title || ""}
                 />
             </section>
@@ -1620,22 +1665,30 @@ export default function Welcome({
                                             </div>
                                             <div className="h-px flex-1 bg-slate-100" />
                                         </div>
-                                        
+
                                         <div className="space-y-6">
                                             <div className="relative pl-6 border-l-2 border-rose-200">
                                                 <span className="absolute -left-1 top-0 w-2 h-2 rounded-full bg-rose-500" />
-                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-500 mb-2">Mitos</p>
-                                                <p className="text-slate-900 font-bold text-lg leading-tight tracking-tight italic">"{item.myth}"</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-rose-500 mb-2">
+                                                    Mitos
+                                                </p>
+                                                <p className="text-slate-900 font-bold text-lg leading-tight tracking-tight italic">
+                                                    "{item.myth}"
+                                                </p>
                                             </div>
 
                                             <div className="relative pl-6 border-l-2 border-emerald-200">
                                                 <span className="absolute -left-1 top-0 w-2 h-2 rounded-full bg-emerald-500" />
-                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-2">Fakta</p>
-                                                <p className="text-slate-600 text-base leading-relaxed">{item.fact}</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-2">
+                                                    Fakta
+                                                </p>
+                                                <p className="text-slate-600 text-base leading-relaxed">
+                                                    {item.fact}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="absolute -bottom-8 -right-8 opacity-[0.03] rotate-12 scale-[3] text-slate-900">
                                         {item.icon}
                                     </div>
@@ -1660,73 +1713,90 @@ export default function Welcome({
                                 Meet Our Team Members
                             </h2>
                             <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-                                Individu berdedikasi tinggi yang berkomitmen untuk memberikan pelayanan KB terbaik & pengabdian tulus bagi masyarakat.
+                                Individu berdedikasi tinggi yang berkomitmen
+                                untuk memberikan pelayanan KB terbaik &
+                                pengabdian tulus bagi masyarakat.
                             </p>
                         </FadeUp>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {teams.length > 0 ? (
-                            teams.map((member, i) => (
-                                <FadeUp key={member.id} delay={i * 0.1}>
-                                    <div className="group bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
-                                        <div className="aspect-[4/5] overflow-hidden relative">
-                                            <img 
-                                                src={member.photo_url} 
-                                                alt={member.name}
-                                                className="w-full h-full object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        </div>
-                                        
-                                        <div className="p-6 flex items-center justify-between border-t border-slate-100">
-                                            <div>
-                                                <h4 className="text-slate-900 font-bold text-lg mb-0.5 tracking-tight group-hover:text-amber-600 transition-colors uppercase">
-                                                    {member.name}
-                                                </h4>
-                                                <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-none">
-                                                    {member.role}
-                                                </p>
-                                            </div>
-                                            
-                                            <div className="relative group/share">
-                                                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover/share:bg-amber-100 group-hover/share:text-amber-600 transition-all cursor-pointer">
-                                                    <Icons.Share size={16} />
-                                                </div>
-                                                
-                                                <div className="absolute bottom-full right-0 mb-4 flex gap-2 opacity-0 translate-y-2 pointer-events-none group-hover/share:opacity-100 group-hover/share:translate-y-0 group-hover/share:pointer-events-auto transition-all duration-300">
-                                                    {member.instagram && (
-                                                        <a href={member.instagram} target="_blank" className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors">
-                                                            <Icons.Activity size={12} />
-                                                        </a>
-                                                    )}
-                                                    {member.twitter && (
-                                                        <a href={member.twitter} target="_blank" className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors">
-                                                            <Icons.Mail size={12} />
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </FadeUp>
-                            ))
-                        ) : (
-                            [1,2,3,4].map(i => (
-                                <FadeUp key={i} delay={i * 0.1}>
-                                    <div className="bg-white rounded-3xl p-8 border border-dashed border-slate-300 flex flex-col items-center justify-center h-48 sm:h-auto text-center grayscale opacity-50">
-                                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                            <Icons.Users size={24} />
-                                        </div>
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Team Member Slot</p>
-                                    </div>
-                                </FadeUp>
-                            ))
-                        )}
+                        {teams.length > 0
+                            ? teams.map((member, i) => (
+                                  <FadeUp key={member.id} delay={i * 0.1}>
+                                      <div className="group bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                                          <div className="aspect-[4/5] overflow-hidden relative">
+                                              <img
+                                                  src={member.photo_url}
+                                                  alt={member.name}
+                                                  className="w-full h-full object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110"
+                                              />
+                                              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                          </div>
+
+                                          <div className="p-6 flex items-center justify-between border-t border-slate-100">
+                                              <div>
+                                                  <h4 className="text-slate-900 font-bold text-lg mb-0.5 tracking-tight group-hover:text-amber-600 transition-colors uppercase">
+                                                      {member.name}
+                                                  </h4>
+                                                  <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest leading-none">
+                                                      {member.role}
+                                                  </p>
+                                              </div>
+
+                                              <div className="relative group/share">
+                                                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover/share:bg-amber-100 group-hover/share:text-amber-600 transition-all cursor-pointer">
+                                                      <Icons.Share size={16} />
+                                                  </div>
+
+                                                  <div className="absolute bottom-full right-0 mb-4 flex gap-2 opacity-0 translate-y-2 pointer-events-none group-hover/share:opacity-100 group-hover/share:translate-y-0 group-hover/share:pointer-events-auto transition-all duration-300">
+                                                      {member.instagram && (
+                                                          <a
+                                                              href={
+                                                                  member.instagram
+                                                              }
+                                                              target="_blank"
+                                                              className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors"
+                                                          >
+                                                              <Icons.Activity
+                                                                  size={12}
+                                                              />
+                                                          </a>
+                                                      )}
+                                                      {member.twitter && (
+                                                          <a
+                                                              href={
+                                                                  member.twitter
+                                                              }
+                                                              target="_blank"
+                                                              className="w-8 h-8 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-600 hover:text-amber-600 transition-colors"
+                                                          >
+                                                              <Icons.Mail
+                                                                  size={12}
+                                                              />
+                                                          </a>
+                                                      )}
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </FadeUp>
+                              ))
+                            : [1, 2, 3, 4].map((i) => (
+                                  <FadeUp key={i} delay={i * 0.1}>
+                                      <div className="bg-white rounded-3xl p-8 border border-dashed border-slate-300 flex flex-col items-center justify-center h-48 sm:h-auto text-center grayscale opacity-50">
+                                          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                              <Icons.Users size={24} />
+                                          </div>
+                                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                              Team Member Slot
+                                          </p>
+                                      </div>
+                                  </FadeUp>
+                              ))}
                     </div>
                 </div>
             </section>
-
 
             {/* ══════════════════════════════════════════════════════
                 14. FAQ — Clean Accordion Style
@@ -1766,14 +1836,26 @@ export default function Welcome({
             {/* ══════════════════════════════════════════════════════
                 14. SURVEI CTA — High Conversion Dark Section
             ════════════════════════════════════════════════════════ */}
-            <section id="survei" className="py-24 sm:py-40 relative overflow-hidden bg-white">
+            <section
+                id="survei"
+                className="py-24 sm:py-40 relative overflow-hidden bg-white"
+            >
                 <div className="max-w-7xl mx-auto px-6 sm:px-8">
                     <div className="relative isolate overflow-hidden bg-slate-900 px-8 py-20 lg:p-24 shadow-2xl rounded-[3rem] lg:rounded-[4rem] border border-white/10">
                         {/* High-end Radial Glow */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/10 via-amber-500/5 to-transparent -z-10 blur-3xl opacity-50" />
-                        
-                        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
-                            <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-amber-400 to-indigo-500 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style={{clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'}}></div>
+
+                        <div
+                            className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+                            aria-hidden="true"
+                        >
+                            <div
+                                className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-amber-400 to-indigo-500 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                                style={{
+                                    clipPath:
+                                        "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                                }}
+                            ></div>
                         </div>
 
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -1790,23 +1872,38 @@ export default function Welcome({
                                         </span>
                                     </h2>
                                     <p className="text-slate-400 text-lg sm:text-xl leading-relaxed mb-12 max-w-xl">
-                                        Setiap aspirasi Anda adalah navigasi bagi kami untuk memberikan pelayanan kesehatan yang lebih prima & transparan.
+                                        Setiap aspirasi Anda adalah navigasi
+                                        bagi kami untuk memberikan pelayanan
+                                        kesehatan yang lebih prima & transparan.
                                     </p>
                                 </FadeUp>
 
-                                <FadeUp delay={0.2} className="flex flex-col sm:flex-row items-center gap-6">
+                                <FadeUp
+                                    delay={0.2}
+                                    className="flex flex-col sm:flex-row items-center gap-6"
+                                >
                                     <div className="flex -space-x-4">
                                         {[1, 2, 3, 4, 5].map((i) => (
-                                            <div key={i} className="w-12 h-12 rounded-full border-4 border-slate-900 shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-300">
-                                                <img src={`https://ui-avatars.com/api/?name=U${i}&background=${i % 2 ? 'f59e0b' : '6366f1'}&color=fff&bold=true`} alt="User" />
+                                            <div
+                                                key={i}
+                                                className="w-12 h-12 rounded-full border-4 border-slate-900 shadow-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-300"
+                                            >
+                                                <img
+                                                    src={`https://ui-avatars.com/api/?name=U${i}&background=${i % 2 ? "f59e0b" : "6366f1"}&color=fff&bold=true`}
+                                                    alt="User"
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                     <div className="text-center sm:text-left">
                                         <p className="text-white font-bold text-lg mb-0.5 tracking-tight">
-                                            {totalResponden}+ Responden Terdaftar
+                                            {totalResponden}+ Responden
+                                            Terdaftar
                                         </p>
-                                        <p className="text-slate-500 text-sm font-medium">Telah berkontribusi memberikan masukan berharga</p>
+                                        <p className="text-slate-500 text-sm font-medium">
+                                            Telah berkontribusi memberikan
+                                            masukan berharga
+                                        </p>
                                     </div>
                                 </FadeUp>
                             </div>
@@ -1823,17 +1920,35 @@ export default function Welcome({
                                                 Isi Kuesioner Sekarang
                                             </h3>
                                             <p className="text-slate-500 text-sm font-medium">
-                                                Data terjamin anonimitasnya & diolah secara profesional.
+                                                Data terjamin anonimitasnya &
+                                                diolah secara profesional.
                                             </p>
                                         </div>
 
                                         <div className="space-y-4 mb-10">
                                             {[
-                                                { icon: <Icons.Shield size={18} />, text: "Layanan Aman & Terpecaya" },
-                                                { icon: <Icons.Star size={18} />, text: "Penilaian Kepuasan Terpadu" }
+                                                {
+                                                    icon: (
+                                                        <Icons.Shield
+                                                            size={18}
+                                                        />
+                                                    ),
+                                                    text: "Layanan Aman & Terpecaya",
+                                                },
+                                                {
+                                                    icon: (
+                                                        <Icons.Star size={18} />
+                                                    ),
+                                                    text: "Penilaian Kepuasan Terpadu",
+                                                },
                                             ].map((row, i) => (
-                                                <div key={row.text} className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 font-semibold text-sm">
-                                                    <span className="text-amber-500">{row.icon}</span>
+                                                <div
+                                                    key={row.text}
+                                                    className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-600 font-semibold text-sm"
+                                                >
+                                                    <span className="text-amber-500">
+                                                        {row.icon}
+                                                    </span>
                                                     {row.text}
                                                 </div>
                                             ))}
@@ -1845,7 +1960,10 @@ export default function Welcome({
                                         >
                                             <span className="relative z-10 flex items-center gap-3">
                                                 Buka Lembar Kuesioner
-                                                <Icons.ChevRight size={20} className="group-hover/btn:translate-x-1 transition-transform" />
+                                                <Icons.ChevRight
+                                                    size={20}
+                                                    className="group-hover/btn:translate-x-1 transition-transform"
+                                                />
                                             </span>
                                             <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                                         </Link>

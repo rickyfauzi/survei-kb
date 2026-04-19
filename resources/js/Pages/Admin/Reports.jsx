@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { FiTrendingUp, FiUsers, FiCalendar, FiPrinter, FiFilter, FiBarChart2, FiPieChart } from 'react-icons/fi';
-import { motion } from 'framer-motion';
+import { FiTrendingUp, FiUsers, FiPrinter, FiFilter, FiBarChart2, FiPieChart } from 'react-icons/fi';
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
-    LineChart, Line, AreaChart, Area, Cell, PieChart, Pie
+    AreaChart, Area
 } from 'recharts';
 
 export default function Reports({ monthlyStats, summary, responses, filters }) {
@@ -17,181 +16,146 @@ export default function Reports({ monthlyStats, summary, responses, filters }) {
         router.get(route('admin.reports.index'), { month: value }, { preserveState: true });
     };
 
-    const handlePrint = () => {
-        window.print();
-    };
-
-    const COLORS = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'];
-
     return (
         <AuthenticatedLayout 
             header={
-                <div className="flex justify-between items-center w-full">
-                    <h2 className="font-semibold text-xl text-white leading-tight">Statistik & Analisis Bulanan</h2>
-                    <button 
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg transition-all"
-                    >
-                        <FiPrinter size={18} /> Cetak Statistik
+                <div className="flex items-center justify-between w-full">
+                    <span>Statistik Bulanan</span>
+                    <button onClick={() => window.print()} className="flex items-center gap-1.5 bg-[#405189] text-white px-4 py-[8px] rounded-sm text-[13px] font-medium hover:bg-[#3a4a7d] transition-colors">
+                        <FiPrinter size={14} /> Cetak Statistik
                     </button>
                 </div>
             }
         >
-            <Head title="Statistik Bulanan" />
+            <Head title="Statistik" />
 
-            <div className="space-y-8 pb-12">
-                {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="bg-[#111827] p-6 rounded-2xl border border-slate-800 shadow-xl"
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500">
-                                <FiUsers size={24} />
+            <div className="space-y-4">
+
+                {/* Row 1: Summary Cards + Filter */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Total Responden</span>
+                                <div className="w-8 h-8 bg-indigo-50 rounded-sm flex items-center justify-center text-indigo-500"><FiUsers size={16} /></div>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total</span>
+                            <h3 className="text-[22px] font-semibold text-slate-800">{summary.total}</h3>
+                            <p className="text-[12px] text-slate-400 mt-1">Sepanjang periode</p>
                         </div>
-                        <h3 className="text-3xl font-black text-white">{summary.total}</h3>
-                        <p className="text-slate-400 text-sm mt-1 font-medium">Total Responden Terdata</p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div 
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                        className="bg-[#111827] p-6 rounded-2xl border border-slate-800 shadow-xl"
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
-                                <FiTrendingUp size={24} />
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Indeks Kepuasan</span>
+                                <div className="w-8 h-8 bg-teal-50 rounded-sm flex items-center justify-center text-teal-500"><FiTrendingUp size={16} /></div>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Kepuasan</span>
+                            <div className="flex items-baseline gap-1">
+                                <h3 className="text-[22px] font-semibold text-slate-800">{summary.avg}</h3>
+                                <span className="text-slate-400 text-sm">/ 100</span>
+                            </div>
+                            <p className="text-[12px] text-slate-400 mt-1">Skor rata-rata</p>
                         </div>
-                        <div className="flex items-baseline gap-2">
-                            <h3 className="text-3xl font-black text-white">{summary.avg}</h3>
-                            <span className="text-slate-500 font-bold">/ 100</span>
-                        </div>
-                        <p className="text-slate-400 text-sm mt-1 font-medium">Skor Rata-rata Pelayanan</p>
-                    </motion.div>
+                    </div>
 
-                    <div className="bg-[#111827] p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-center">
-                        <label className="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em] mb-3 block">Filter Periode Bulan</label>
-                        <div className="relative">
-                            <FiFilter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-                            <select 
-                                value={selectedMonth}
-                                onChange={handleFilter}
-                                className="w-full bg-[#1F2937] border-slate-700 rounded-xl py-3 pl-12 pr-4 text-white focus:ring-blue-500 focus:border-blue-500 transition-all font-medium appearance-none"
-                            >
-                                <option value="">Semua Waktu</option>
-                                {monthlyStats.map(stat => (
-                                    <option key={stat.month} value={stat.month}>{stat.month}</option>
-                                ))}
-                            </select>
+                    <div className="card">
+                        <div className="card-body">
+                            <label className="text-[12px] font-medium text-slate-600 mb-1.5 block">Filter Periode</label>
+                            <div className="relative">
+                                <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                <select value={selectedMonth} onChange={handleFilter}
+                                    className="w-full border border-slate-200 rounded-sm py-[7px] pl-9 pr-3 text-[13px] text-slate-700 focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400 appearance-none bg-white">
+                                    <option value="">Semua Waktu</option>
+                                    {monthlyStats.map(stat => (<option key={stat.month} value={stat.month}>{stat.month}</option>))}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Main Statistical Chart */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sticky-container">
-                    {/* 1. Bar Chart: Satisfaction Breakdown Per Month */}
-                    <div className="bg-[#111827] rounded-3xl border border-slate-800 p-8 shadow-2xl">
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
-                                <FiBarChart2 size={20} />
-                            </div>
-                            <h3 className="font-bold text-white uppercase tracking-wider text-sm">Distribusi Kepuasan Per Bulan</h3>
+                {/* Row 2: Charts */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="card">
+                        <div className="card-header flex items-center gap-2 pb-3 border-b border-slate-100" style={{ padding: '16px' }}>
+                            <FiBarChart2 className="text-[#405189]" size={15} />
+                            <h5 className="text-[13px] font-semibold text-slate-800 uppercase">Distribusi Kepuasan</h5>
                         </div>
-                        <div className="h-[350px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={monthlyStats} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f2937" />
-                                    <XAxis dataKey="month" stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} />
-                                    <Tooltip 
-                                        contentStyle={{ backgroundColor: '#0b0f19', border: '1px solid #1f2937', borderRadius: '12px' }}
-                                        itemStyle={{ fontSize: '12px', fontWeight: 'bold' }}
-                                    />
-                                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: 'bold' }} />
-                                    <Bar dataKey="sangatPuas" name="Sangat Puas" fill="#10B981" radius={[4, 4, 0, 0]} stackId="a" />
-                                    <Bar dataKey="puas" name="Puas" fill="#3B82F6" radius={[4, 4, 0, 0]} stackId="a" />
-                                    <Bar dataKey="cukup" name="Cukup" fill="#F59E0B" radius={[4, 4, 0, 0]} stackId="a" />
-                                    <Bar dataKey="kurang" name="Kurang" fill="#EF4444" radius={[4, 4, 0, 0]} stackId="a" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                        <div className="card-body">
+                            <div className="h-[320px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={monthlyStats} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eff2f7" />
+                                        <XAxis dataKey="month" stroke="#878a99" fontSize={11} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#878a99" fontSize={11} tickLine={false} axisLine={false} />
+                                        <Tooltip contentStyle={{ border: '1px solid #e9ebec', borderRadius: '4px', fontSize: '12px' }} />
+                                        <Legend iconType="square" wrapperStyle={{ paddingTop: '12px', fontSize: '11px' }} />
+                                        <Bar dataKey="sangatPuas" name="Sangat Puas" fill="#0ab39c" stackId="a" />
+                                        <Bar dataKey="puas" name="Puas" fill="#405189" stackId="a" />
+                                        <Bar dataKey="cukup" name="Cukup" fill="#f7b84b" stackId="a" />
+                                        <Bar dataKey="kurang" name="Kurang" fill="#f06548" stackId="a" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
 
-                    {/* 2. Line Chart: Average Score Trend */}
-                    <div className="bg-[#111827] rounded-3xl border border-slate-800 p-8 shadow-2xl">
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
-                                <FiTrendingUp size={20} />
-                            </div>
-                            <h3 className="font-bold text-white uppercase tracking-wider text-sm">Tren Skor Pelayanan</h3>
+                    <div className="card">
+                        <div className="card-header flex items-center gap-2 pb-3 border-b border-slate-100" style={{ padding: '16px' }}>
+                            <FiTrendingUp className="text-teal-500" size={15} />
+                            <h5 className="text-[13px] font-semibold text-slate-800 uppercase">Tren Skor Pelayanan</h5>
                         </div>
-                        <div className="h-[350px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={monthlyStats} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                    <defs>
-                                        <linearGradient id="colorAvg" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f2937" />
-                                    <XAxis dataKey="month" stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis stroke="#6b7280" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
-                                    <Tooltip 
-                                        contentStyle={{ backgroundColor: '#0b0f19', border: '1px solid #1f2937', borderRadius: '12px' }}
-                                        itemStyle={{ fontSize: '12px', fontWeight: 'bold' }}
-                                    />
-                                    <Area type="monotone" dataKey="avg" name="Rata-rata Skor" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorAvg)" />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                        <div className="card-body">
+                            <div className="h-[320px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={monthlyStats} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                                        <defs>
+                                            <linearGradient id="colorAvgR" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#405189" stopOpacity={0.12}/>
+                                                <stop offset="95%" stopColor="#405189" stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eff2f7" />
+                                        <XAxis dataKey="month" stroke="#878a99" fontSize={11} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#878a99" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} />
+                                        <Tooltip contentStyle={{ border: '1px solid #e9ebec', borderRadius: '4px', fontSize: '12px' }} />
+                                        <Area type="monotone" dataKey="avg" name="Rata-rata" stroke="#405189" strokeWidth={2} fillOpacity={1} fill="url(#colorAvgR)" dot={false} activeDot={{ r: 4, fill: '#405189', stroke: '#fff', strokeWidth: 2 }} />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Legend / Info per Month Section */}
-                <div className="bg-[#111827] rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
-                    <div className="p-6 border-b border-slate-800 bg-slate-800/10">
-                        <div className="flex items-center gap-3">
-                            <FiPieChart className="text-amber-500" size={20} />
-                            <h3 className="font-bold text-white uppercase tracking-wider text-sm">Detail Persentase Bulanan</h3>
-                        </div>
+                {/* Row 3: Monthly Detail */}
+                <div className="card">
+                    <div className="card-header flex items-center gap-2 pb-3 border-b border-slate-100" style={{ padding: '16px' }}>
+                        <FiPieChart className="text-amber-500" size={15} />
+                        <h5 className="text-[13px] font-semibold text-slate-800 uppercase">Detail Persentase Bulanan</h5>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-800">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                         {monthlyStats.slice(-4).map((stat) => (
-                            <div key={stat.month} className="p-6 hover:bg-slate-800/20 transition-all">
-                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">{stat.month}</div>
+                            <div key={stat.month} className="p-4 hover:bg-slate-50/50 transition-colors">
+                                <p className="text-[12px] font-semibold text-[#405189] uppercase tracking-wider mb-4">{stat.month}</p>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between text-xs font-bold">
-                                        <span className="text-emerald-500">Sangat Puas</span>
-                                        <span className="text-slate-300">{Math.round((stat.sangatPuas/stat.total)*100 || 0)}%</span>
-                                    </div>
-                                    <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-emerald-500" style={{ width: `${(stat.sangatPuas/stat.total)*100}%` }} />
-                                    </div>
-
-                                    <div className="flex justify-between text-xs font-bold pt-1">
-                                        <span className="text-blue-500">Puas</span>
-                                        <span className="text-slate-300">{Math.round((stat.puas/stat.total)*100 || 0)}%</span>
-                                    </div>
-                                    <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-blue-500" style={{ width: `${(stat.puas/stat.total)*100}%` }} />
-                                    </div>
-
-                                    <div className="flex justify-between text-xs font-bold pt-1">
-                                        <span className="text-amber-500">Cukup</span>
-                                        <span className="text-slate-300">{Math.round((stat.cukup/stat.total)*100 || 0)}%</span>
-                                    </div>
-                                    <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-amber-500" style={{ width: `${(stat.cukup/stat.total)*100}%` }} />
-                                    </div>
+                                    {[
+                                        { label: 'Sangat Puas', key: 'sangatPuas', color: 'bg-teal-500', text: 'text-teal-600' },
+                                        { label: 'Puas', key: 'puas', color: 'bg-indigo-500', text: 'text-indigo-600' },
+                                        { label: 'Cukup', key: 'cukup', color: 'bg-amber-400', text: 'text-amber-600' },
+                                    ].map(({ label, key, color, text }) => (
+                                        <div key={key}>
+                                            <div className="flex justify-between text-[11px] font-medium mb-1">
+                                                <span className={text}>{label}</span>
+                                                <span className="text-slate-600">{Math.round((stat[key] / stat.total) * 100 || 0)}%</span>
+                                            </div>
+                                            <div className="w-full h-[4px] bg-slate-100 rounded-full overflow-hidden">
+                                                <div className={`h-full rounded-full ${color}`} style={{ width: `${(stat[key] / stat.total) * 100}%` }} />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className="mt-6 flex items-center justify-between">
-                                    <span className="text-[10px] font-black text-slate-500 uppercase">Total Responden</span>
-                                    <span className="text-white font-black">{stat.total}</span>
+                                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                    <span className="text-[10px] font-medium text-slate-400 uppercase">Total</span>
+                                    <span className="text-[13px] font-semibold text-slate-700">{stat.total}</span>
                                 </div>
                             </div>
                         ))}
@@ -199,16 +163,7 @@ export default function Reports({ monthlyStats, summary, responses, filters }) {
                 </div>
             </div>
 
-            <style jsx global>{`
-                @media print {
-                    nav, header, .no-print, .pb-12, .sticky-container button { display: none !important; }
-                    body { background: white !important; color: black !important; }
-                    .bg-[#111827] { background: white !important; color: black !important; border: 1px solid #eee !important; }
-                    .text-white { color: black !important; }
-                    .recharts-cartesian-grid-horizontal line { stroke: #eee !important; }
-                    .recharts-text { fill: #000 !important; }
-                }
-            `}</style>
+            <style>{`@media print { nav, header, select, button { display:none!important; } * { -webkit-print-color-adjust:exact!important; } }`}</style>
         </AuthenticatedLayout>
     );
 }

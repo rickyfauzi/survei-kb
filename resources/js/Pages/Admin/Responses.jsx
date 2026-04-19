@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { FiEye, FiTrash2, FiSearch, FiCalendar, FiMapPin, FiMessageSquare, FiUser, FiSmartphone, FiX, FiFilter, FiAward, FiPrinter, FiSend } from 'react-icons/fi';
+import { FiEye, FiTrash2, FiSearch, FiCalendar, FiMapPin, FiSmartphone, FiX, FiFilter, FiAward, FiPrinter, FiUsers, FiRefreshCw } from 'react-icons/fi';
 import Modal from '@/Components/Modal';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -9,401 +9,231 @@ export default function Responses({ auth, responses, filters }) {
     const [search, setSearch] = useState(filters?.search || '');
     const [dateStart, setDateStart] = useState(filters?.date_start || '');
     const [dateEnd, setDateEnd] = useState(filters?.date_end || '');
-    
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [isCertOpen, setIsCertOpen] = useState(false);
     const [selectedResponse, setSelectedResponse] = useState(null);
 
-    const certificateRef = useRef();
-
-    const handleSearch = (e) => {
-        if (e.key === 'Enter') applyFilters();
-    };
-
-    const applyFilters = () => {
-        router.get(route('admin.responses.index'), { search, date_start: dateStart, date_end: dateEnd }, { preserveState: true, preserveScroll: true });
-    };
-
-    const clearFilters = () => {
-        setSearch(''); setDateStart(''); setDateEnd('');
-        router.get(route('admin.responses.index'));
-    };
-
-    const deleteResponse = (id) => {
-        if (confirm('Delete this response record? This action cannot be undone.')) {
-            router.delete(route('admin.responses.destroy', id), {
-                preserveScroll: true,
-                onSuccess: () => toast.success('Response deleted successfully')
-            });
-        }
-    };
-
-    const openDetail = (resp) => {
-        setSelectedResponse(resp);
-        setIsDetailOpen(true);
-    };
-
-    const openCertificate = (resp) => {
-        setSelectedResponse(resp);
-        setIsCertOpen(true);
-    };
-
-    const closeDetail = () => {
-        setIsDetailOpen(false);
-        setTimeout(() => setSelectedResponse(null), 300);
-    };
-
-    const closeCert = () => {
-        setIsCertOpen(false);
-        setTimeout(() => setSelectedResponse(null), 300);
-    };
-
-    const handlePrint = () => {
-        window.print();
-    };
-
+    const applyFilters = () => { router.get(route('admin.responses.index'), { search, date_start: dateStart, date_end: dateEnd }, { preserveState: true, preserveScroll: true }); };
+    const clearFilters = () => { setSearch(''); setDateStart(''); setDateEnd(''); router.get(route('admin.responses.index')); };
+    const deleteResponse = (id) => { if (confirm('Hapus data ini?')) router.delete(route('admin.responses.destroy', id), { preserveScroll: true, onSuccess: () => toast.success('Dihapus') }); };
+    const openDetail = (r) => { setSelectedResponse(r); setIsDetailOpen(true); };
+    const openCertificate = (r) => { setSelectedResponse(r); setIsCertOpen(true); };
+    const closeDetail = () => { setIsDetailOpen(false); setTimeout(() => setSelectedResponse(null), 200); };
+    const closeCert = () => { setIsCertOpen(false); setTimeout(() => setSelectedResponse(null), 200); };
     const contactWhatsApp = (num, name) => {
-        const cleanNum = num.replace(/[^0-9]/g, '');
-        const finalNum = cleanNum.startsWith('0') ? '62' + cleanNum.substring(1) : cleanNum;
-        const msg = encodeURIComponent(`Halo Ibu/Bapak ${name},\n\nTerima kasih telah mengisi Survei Kepuasan di Balai KB Argapura. Masukan Anda sangat berarti bagi kami.`);
-        window.open(`https://wa.me/${finalNum}?text=${msg}`, '_blank');
+        const c = num.replace(/[^0-9]/g, ''); const f = c.startsWith('0') ? '62' + c.substring(1) : c;
+        window.open(`https://wa.me/${f}?text=${encodeURIComponent(`Halo ${name}, terima kasih telah mengisi survei di Balai KB Argapura.`)}`, '_blank');
     };
 
     return (
-        <AuthenticatedLayout header="Responses Data">
-            <Head title="Data Responden" />
-            <Toaster position="top-center" toastOptions={{
-                className: 'font-medium rounded-lg text-sm transition-all',
-                style: { background: '#1F2937', color: '#fff', border: '1px solid #374151' }
-            }} />
+        <AuthenticatedLayout header="Data Responden">
+            <Head title="Responden" />
+            <Toaster position="top-right" toastOptions={{ style: { fontSize: '13px' } }} />
 
-            <div className="pb-8 print:hidden">
-                
-                {/* Dashdark Advanced Filter Bar */}
-                <div className="bg-[#111827] rounded-xl border border-slate-800 p-4 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <div className="relative w-full md:w-1/3">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16}/>
-                        <input
-                            type="text"
-                            placeholder="Search user, WhatsApp..."
-                            className="w-full bg-[#1F2937] border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg py-2 pl-9 pr-4 text-sm text-white placeholder-slate-500"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            onKeyDown={handleSearch}
-                        />
+            <div className="space-y-4 print:hidden">
+                {/* Filter Card */}
+                <div className="card">
+                    <div className="card-header pb-3 border-b border-slate-100" style={{ padding: '16px' }}>
+                        <h5 className="text-[13px] font-semibold text-slate-800">Filter Data</h5>
                     </div>
-                    
-                    <div className="flex w-full md:w-auto gap-3 items-center bg-[#1F2937] border border-slate-700 px-3 py-1.5 rounded-lg">
-                        <FiCalendar className="text-slate-500" size={16}/>
-                        <input
-                            type="date"
-                            className="border-none bg-transparent text-slate-300 text-sm focus:ring-0 p-0 hover:text-white transition-colors"
-                            value={dateStart}
-                            onChange={(e) => setDateStart(e.target.value)}
-                        />
-                        <span className="text-slate-600">-</span>
-                        <input
-                            type="date"
-                            className="border-none bg-transparent text-slate-300 text-sm focus:ring-0 p-0 hover:text-white transition-colors"
-                            value={dateEnd}
-                            onChange={(e) => setDateEnd(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="flex w-full md:w-auto gap-3">
-                        <button onClick={applyFilters} className="flex items-center gap-2 flex-1 md:flex-none bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors shadow-lg">
-                            <FiFilter size={16}/> Filter
-                        </button>
-                        {(search || dateStart || dateEnd) && (
-                            <button onClick={clearFilters} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-700 hover:text-white transition-colors border border-slate-700">
-                                Reset
-                            </button>
-                        )}
+                    <div className="card-body">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                            <div className="md:col-span-4">
+                                <label className="text-[12px] font-medium text-slate-600 mb-1.5 block">Cari Responden</label>
+                                <div className="relative">
+                                    <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                    <input type="text" placeholder="Nama, WA, lokasi..." value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && applyFilters()}
+                                        className="w-full border border-slate-200 rounded-sm py-[7px] pl-9 pr-3 text-[13px] focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400 placeholder:text-slate-400" />
+                                </div>
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="text-[12px] font-medium text-slate-600 mb-1.5 block">Dari Tanggal</label>
+                                <input type="date" value={dateStart} onChange={e => setDateStart(e.target.value)}
+                                    className="w-full border border-slate-200 rounded-sm py-[7px] px-3 text-[13px] focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400" />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="text-[12px] font-medium text-slate-600 mb-1.5 block">Sampai Tanggal</label>
+                                <input type="date" value={dateEnd} onChange={e => setDateEnd(e.target.value)}
+                                    className="w-full border border-slate-200 rounded-sm py-[7px] px-3 text-[13px] focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400" />
+                            </div>
+                            <div className="md:col-span-4 flex gap-2">
+                                <button onClick={applyFilters} className="flex-1 flex items-center justify-center gap-1.5 bg-[#405189] text-white py-[8px] rounded-sm text-[13px] font-medium hover:bg-[#3a4a7d] transition-colors">
+                                    <FiFilter size={14}/> Terapkan
+                                </button>
+                                <button onClick={clearFilters} className="flex items-center justify-center gap-1.5 bg-white border border-slate-200 text-slate-600 py-[8px] px-3 rounded-sm text-[13px] hover:bg-slate-50 transition-colors">
+                                    <FiRefreshCw size={13}/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Table Data Container */}
-                <div className="bg-[#111827] rounded-xl border border-slate-800 overflow-hidden">
+                {/* Data Table Card */}
+                <div className="card">
+                    <div className="card-header flex items-center justify-between pb-3 border-b border-slate-100" style={{ padding: '16px' }}>
+                        <h5 className="text-[13px] font-semibold text-slate-800">Database Responden</h5>
+                        <span className="text-[12px] text-slate-400">{responses.data.length} data</span>
+                    </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full">
                             <thead>
-                                <tr className="bg-[#1F2937]/50">
-                                    <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">Respondent</th>
-                                    <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800 hidden md:table-cell">Contact & Area</th>
-                                    <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800 text-center">Score</th>
-                                    <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800 text-right">Actions</th>
+                                <tr className="border-b border-slate-100">
+                                    <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-left">Responden</th>
+                                    <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-left hidden md:table-cell">Kontak</th>
+                                    <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-left hidden lg:table-cell">Wilayah</th>
+                                    <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center w-20">Skor</th>
+                                    <th className="px-4 py-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center w-28">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-800/50">
+                            <tbody>
                                 {responses.data.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="4" className="px-6 py-16 text-center text-slate-500 text-sm">
-                                            No responses found matching criteria.
+                                    <tr><td colSpan="5" className="px-4 py-12 text-center text-slate-400 text-sm">Tidak ada data ditemukan.</td></tr>
+                                ) : responses.data.map((r) => (
+                                    <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center gap-2.5">
+                                                <div className="w-8 h-8 bg-indigo-50 rounded-sm flex items-center justify-center text-indigo-600 text-xs font-semibold shrink-0">{r.nama.charAt(0).toUpperCase()}</div>
+                                                <div>
+                                                    <p className="text-[13px] font-medium text-slate-700">{r.nama}</p>
+                                                    <p className="text-[11px] text-slate-400">{new Date(r.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 hidden md:table-cell">
+                                            <button onClick={() => contactWhatsApp(r.no_wa, r.nama)} className="text-[12px] text-green-600 font-medium hover:underline flex items-center gap-1"><FiSmartphone size={12}/> {r.no_wa}</button>
+                                        </td>
+                                        <td className="px-4 py-3 hidden lg:table-cell">
+                                            <span className="text-[12px] text-slate-500">{r.lokasi}</span>
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <span className={`inline-block text-[12px] font-semibold px-2 py-0.5 rounded-sm ${r.rata_skor >= 80 ? 'bg-teal-50 text-teal-600' : r.rata_skor >= 60 ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600'}`}>{r.rata_skor}</span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center justify-center gap-0.5">
+                                                <button onClick={() => openCertificate(r)} className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-sm" title="Piagam"><FiAward size={14} /></button>
+                                                <button onClick={() => openDetail(r)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-sm" title="Detail"><FiEye size={14} /></button>
+                                                <button onClick={() => deleteResponse(r.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-sm" title="Hapus"><FiTrash2 size={14} /></button>
+                                            </div>
                                         </td>
                                     </tr>
-                                ) : (
-                                    responses.data.map((resp) => (
-                                        <tr key={resp.id} className="hover:bg-[#1F2937] transition-colors group">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 rounded shadow-sm bg-[#1F2937] flex items-center justify-center font-bold text-white border border-slate-700 shrink-0">
-                                                        {resp.nama.charAt(0).toUpperCase()}
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="font-semibold text-slate-200 text-sm">{resp.nama}</h4>
-                                                        <p className="text-xs text-slate-500 mt-0.5">
-                                                            {new Date(resp.created_at).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute:'2-digit'})}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 hidden md:table-cell text-nowrap">
-                                                <div className="text-xs">
-                                                    <button 
-                                                        onClick={() => contactWhatsApp(resp.no_wa, resp.nama)}
-                                                        className="text-emerald-400 font-bold hover:text-emerald-300 flex items-center gap-1.5 transition-colors group/wa"
-                                                    >
-                                                        <FiSmartphone className="text-emerald-500 group-hover/wa:scale-110 transition-transform"/> {resp.no_wa}
-                                                        <FiSend className="opacity-0 group-hover/wa:opacity-100 transition-opacity ml-1" size={10}/>
-                                                    </button>
-                                                    <p className="text-slate-500 mt-1 flex items-center gap-1.5"><FiMapPin className="text-slate-600"/> {resp.lokasi} • {resp.angkatan}</p>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className={`px-2.5 py-1 rounded text-xs font-bold border ${
-                                                    resp.rata_skor >= 80 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                                                    resp.rata_skor >= 60 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                                                    'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                                                }`}>
-                                                    {resp.rata_skor}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-1.5">
-                                                    <button onClick={() => openCertificate(resp)} className="p-2 text-amber-400 hover:text-amber-300 hover:bg-amber-400/10 rounded border border-transparent hover:border-amber-400/20 transition-all" title="Generate Certificate">
-                                                        <FiAward size={16} />
-                                                    </button>
-                                                    <button onClick={() => openDetail(resp)} className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded border border-transparent hover:border-blue-400/20 transition-all" title="View details">
-                                                        <FiEye size={16} />
-                                                    </button>
-                                                    <button onClick={() => deleteResponse(resp.id)} className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded border border-transparent hover:border-red-400/20 transition-all" title="Delete record">
-                                                        <FiTrash2 size={16} />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
+                                ))}
                             </tbody>
                         </table>
                     </div>
-                </div>
-
-                {/* Pagination */}
-                {responses.links && responses.links.length > 3 && (
-                    <div className="mt-6 flex justify-center">
-                        <div className="inline-flex gap-1 bg-[#111827] p-1 rounded-lg border border-slate-800">
-                            {responses.links.map((link, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
-                                    disabled={!link.url}
-                                    className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                                        link.active ? 'bg-blue-600 text-white' : 
-                                        link.url ? 'text-slate-400 hover:bg-[#1F2937] hover:text-white' : 'text-slate-600 cursor-not-allowed hidden md:block'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
+                    {/* Pagination */}
+                    {responses.links && responses.links.length > 3 && (
+                        <div className="p-4 border-t border-slate-100 flex justify-end">
+                            <div className="inline-flex rounded-sm overflow-hidden border border-slate-200">
+                                {responses.links.map((link, idx) => (
+                                    <button key={idx} onClick={() => link.url && router.get(link.url, {}, { preserveState: true })} disabled={!link.url}
+                                        className={`px-3 py-1.5 text-[12px] font-medium border-r border-slate-200 last:border-r-0 transition-colors ${link.active ? 'bg-[#405189] text-white' : link.url ? 'bg-white text-slate-600 hover:bg-slate-50' : 'bg-slate-50 text-slate-300'}`}
+                                        dangerouslySetInnerHTML={{ __html: link.label }} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
-            {/* Certificate Modal */}
-            <Modal show={isCertOpen} onClose={closeCert} maxWidth="4xl">
+            {/* Detail Modal */}
+            <Modal show={isDetailOpen} onClose={closeDetail} maxWidth="xl">
                 {selectedResponse && (
-                    <div className="bg-[#111827] border border-slate-700 rounded-2xl overflow-hidden shadow-2xl flex flex-col items-center">
-                        <div className="print:hidden w-full p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1F2937]/50">
-                            <h3 className="text-white font-bold flex items-center gap-2"><FiAward className="text-amber-500"/> Certificate Management</h3>
-                            <div className="flex gap-2 w-full sm:w-auto">
-                                <button 
-                                    onClick={() => contactWhatsApp(selectedResponse.no_wa, selectedResponse.nama)}
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-900/20"
-                                >
-                                    <FiSend size={16}/> KIRIM KE WA
-                                </button>
-                                <button 
-                                    onClick={handlePrint} 
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-amber-500 text-amber-950 px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-amber-400 transition-all shadow-lg shadow-amber-900/20"
-                                >
-                                    <FiPrinter size={16}/> DOWNLOAD / CETAK
-                                </button>
-                                <button onClick={closeCert} className="text-slate-400 hover:text-white bg-slate-800 p-2.5 rounded-lg border border-slate-700"><FiX size={18}/></button>
-                            </div>
-                        </div>
-
-                        <div className="p-10 bg-white w-full flex justify-center overflow-x-auto print:p-0">
-                            {/* Certificate Design */}
-                            <div id="certificate-print-area" className="w-[800px] h-[580px] border-[16px] border-double border-indigo-900 p-10 relative bg-white flex flex-col items-center justify-between text-slate-900 shrink-0">
-                                {/* Corners */}
-                                <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-amber-500"></div>
-                                <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-amber-500"></div>
-                                <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-amber-500"></div>
-                                <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-amber-500"></div>
-
-                                {/* Logos */}
-                                <div className="flex justify-between w-full items-center mb-4">
-                                    <img src="/1000492763-removebg-preview.png" alt="BKKBN Logo" className="h-14 object-contain" />
-                                    <div className="text-center">
-                                        <h2 className="text-2xl font-black text-indigo-950 uppercase tracking-tighter">SURVEI KEPUASAN LAYANAN</h2>
-                                        <p className="text-[10px] font-bold text-amber-600 tracking-[0.3em] uppercase">Balai KB Argapura</p>
-                                    </div>
-                                    <img src="/Logogram-Warna.png" alt="Logo" className="h-14 object-contain" />
+                    <div className="bg-white rounded-sm overflow-hidden">
+                        <div className="px-5 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 bg-[#405189] rounded-sm flex items-center justify-center text-white font-semibold">{selectedResponse.nama.charAt(0)}</div>
+                                <div>
+                                    <h5 className="text-[14px] font-semibold text-slate-800">{selectedResponse.nama}</h5>
+                                    <p className="text-[11px] text-slate-400">{selectedResponse.lokasi} · {selectedResponse.no_wa}</p>
                                 </div>
-
-                                <div className="text-center flex-1 flex flex-col justify-center gap-4">
-                                    <h1 className="text-5xl font-serif text-indigo-900 border-b-2 border-slate-100 pb-4 mb-2">Piagam Penghargaan</h1>
-                                    <p className="font-medium text-slate-500 italic">Diberikan Sebagai Tanda Terima Kasih Kepada :</p>
-                                    
-                                    <div className="py-2">
-                                        <h3 className="text-4xl font-bold text-slate-900 uppercase tracking-tight underline decoration-amber-500 decoration-offset-4">{selectedResponse.nama}</h3>
-                                        <p className="text-sm text-slate-400 mt-2 font-semibold">Responden - {selectedResponse.angkatan}</p>
-                                    </div>
-
-                                    <p className="max-w-xl mx-auto text-sm leading-relaxed text-slate-600 px-8">
-                                        Terima kasih yang sebesar-besarnya atas partisipasi aktif Anda dalam memberikan evaluasi dan masukan yang konstruktif melalui Survei Indeks Kepuasan Masyarakat (IKM) pada pelayanan Balai KB Argapura. Kontribusi Anda merupakan fondasi utama bagi peningkatan kualitas pelayanan keluarga berencana kami.
+                            </div>
+                            <button onClick={closeDetail} className="text-slate-400 hover:text-slate-600"><FiX size={18}/></button>
+                        </div>
+                        <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-slate-50 border border-slate-100 rounded-sm p-4">
+                                    <p className="text-[11px] text-slate-400 font-medium uppercase mb-1">Skor</p>
+                                    <p className="text-2xl font-semibold text-slate-800">{selectedResponse.rata_skor}<span className="text-sm text-slate-400 font-normal"> / 100</span></p>
+                                </div>
+                                <div className="bg-slate-50 border border-slate-100 rounded-sm p-4">
+                                    <p className="text-[11px] text-slate-400 font-medium uppercase mb-1">Klasifikasi</p>
+                                    <p className={`text-lg font-semibold ${selectedResponse.rata_skor >= 80 ? 'text-teal-600' : selectedResponse.rata_skor >= 60 ? 'text-amber-600' : 'text-red-600'}`}>
+                                        {selectedResponse.rata_skor >= 80 ? 'Sangat Puas' : selectedResponse.rata_skor >= 60 ? 'Puas' : 'Kurang Puas'}
                                     </p>
                                 </div>
-
-                                <div className="w-full flex justify-between items-end mt-10">
-                                    <div className="text-left">
-                                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-1">ID SERTIFIKAT</p>
-                                        <p className="text-xs font-mono font-bold text-slate-600">ARG-{selectedResponse.id}-{new Date(selectedResponse.created_at).getFullYear()}</p>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="w-32 h-20 border-b border-indigo-900 mb-2 mx-auto relative">
-                                            <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-                                                <img src="/Logogram-Warna.png" className="h-16 grayscale" alt="Stamp" />
-                                            </div>
-                                        </div>
-                                        <p className="text-sm font-bold text-slate-900 uppercase">Admin Balai KB</p>
-                                        <p className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Petugas Pelaksana</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">{new Date(selectedResponse.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}</p>
-                                        <p className="text-[9px] text-slate-400 font-bold">TANGGAL PENERBITAN</p>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                )}
-            </Modal>
-
-            {/* Detail View Modal Dashdark Style */}
-            <Modal show={isDetailOpen} onClose={closeDetail} maxWidth="2xl">
-                {selectedResponse && (
-                    <div className="bg-[#111827] border border-slate-700 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                        {/* Header */}
-                        <div className="p-6 border-b border-slate-800 bg-[#1F2937]/50 flex justify-between items-start shrink-0">
-                            <div className="flex gap-4 items-center">
-                                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-2xl text-white shadow-lg">
-                                    {selectedResponse.nama.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-bold text-white">{selectedResponse.nama}</h2>
-                                    <div className="flex gap-3 text-sm mt-1 text-slate-400">
-                                        <span className="flex items-center gap-1.5"><FiMapPin size={14}/> {selectedResponse.lokasi}</span>
-                                        <button 
-                                            onClick={() => contactWhatsApp(selectedResponse.no_wa, selectedResponse.nama)}
-                                            className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors font-medium border-b border-emerald-400/20"
-                                        >
-                                            <FiSmartphone size={14}/> {selectedResponse.no_wa}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onClick={closeDetail} className="text-slate-500 hover:text-white bg-slate-800 p-2 rounded-lg transition-colors"><FiX size={18}/></button>
-                        </div>
-
-                        {/* Body Scrollable */}
-                        <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
-                            
-                            {/* Score Card */}
-                            <div className="bg-[#1F2937] border border-slate-700/50 p-4 rounded-xl flex items-center justify-between">
-                                <div>
-                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-1">Final Index Score</p>
-                                    <p className="text-3xl font-extrabold text-white">{selectedResponse.rata_skor}</p>
-                                </div>
-                                <div className="w-16 h-16 rounded-full border-4 flex items-center justify-center border-slate-800 relative">
-                                    <div className={`absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-blue-500 border-b-transparent border-l-transparent transform rotate-45 opacity-50`}></div>
-                                    <span className="text-white font-bold text-sm">/ 100</span>
-                                </div>
-                            </div>
-
-                            <button onClick={() => openCertificate(selectedResponse)} className="w-full flex items-center justify-center gap-3 bg-amber-500/10 text-amber-500 border border-amber-500/20 py-3 rounded-xl font-bold text-sm hover:bg-amber-500 hover:text-amber-950 transition-all">
-                                <FiAward size={18}/> GENERATE OFFICIAL CERTIFICATE
-                            </button>
-
-                            {/* Itemized Questions */}
                             <div>
-                                <h3 className="font-semibold text-slate-300 text-sm mb-3">Itemized Evaluaton</h3>
-                                <div className="border border-slate-800 rounded-xl divide-y divide-slate-800 overflow-hidden bg-[#1F2937]/30">
+                                <h6 className="text-[12px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Rincian Jawaban</h6>
+                                <div className="border border-slate-100 rounded-sm overflow-hidden divide-y divide-slate-50">
                                     {selectedResponse.answers && selectedResponse.answers.map((ans, idx) => (
-                                        <div key={ans.id} className="p-4 flex items-start gap-4 hover:bg-[#1F2937] transition-colors">
-                                            <span className="text-xs font-bold text-slate-500 w-4 text-right pt-0.5">{idx + 1}.</span>
+                                        <div key={ans.id} className="px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors">
+                                            <span className="text-[11px] font-semibold text-slate-400 w-5">{idx+1}.</span>
                                             <div className="flex-1">
-                                                <p className="text-sm text-slate-200 mb-2">{ans.question ? ans.question.question : 'Archived Question'}</p>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                                        <div 
-                                                            className={`h-full rounded-full transition-all duration-1000 ${
-                                                                ans.score >= 80 ? 'bg-emerald-500' :
-                                                                ans.score >= 60 ? 'bg-amber-500' : 'bg-rose-500'
-                                                            }`} 
-                                                            style={{ width: `${ans.score}%` }}
-                                                        ></div>
-                                                    </div>
-                                                    <span className="text-xs font-bold text-slate-400 w-6">{ans.score}</span>
+                                                <p className="text-[13px] text-slate-600">{ans.question ? ans.question.question : '-'}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <div className="w-14 h-1 bg-slate-100 rounded-full overflow-hidden">
+                                                    <div className={`h-full rounded-full ${ans.score >= 80 ? 'bg-teal-500' : ans.score >= 60 ? 'bg-amber-400' : 'bg-red-500'}`} style={{ width: `${ans.score}%` }} />
                                                 </div>
+                                                <span className="text-[12px] font-semibold text-slate-700 w-6 text-right">{ans.score}</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Feedback */}
                             {selectedResponse.kritik_saran && (
                                 <div>
-                                    <h3 className="font-semibold text-slate-300 text-sm mb-3">Feedback & Notes</h3>
-                                    <div className="bg-[#1F2937]/50 border border-slate-700/50 p-5 rounded-xl">
-                                        <FiMessageSquare className="text-slate-600 mb-2" size={20} />
-                                        <p className="text-sm text-slate-400 leading-relaxed italic">
-                                            "{selectedResponse.kritik_saran}"
-                                        </p>
+                                    <h6 className="text-[12px] font-semibold text-slate-600 uppercase tracking-wider mb-2">Kritik & Saran</h6>
+                                    <div className="bg-slate-50 border border-slate-100 rounded-sm p-4">
+                                        <p className="text-[13px] text-slate-600 italic leading-relaxed">"{selectedResponse.kritik_saran}"</p>
                                     </div>
                                 </div>
                             )}
-
+                            <div className="flex gap-2 pt-2">
+                                <button onClick={() => contactWhatsApp(selectedResponse.no_wa, selectedResponse.nama)} className="flex-1 flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 text-white py-2 rounded-sm text-[13px] font-medium transition-colors"><FiSmartphone size={14}/> WhatsApp</button>
+                                <button onClick={() => openCertificate(selectedResponse)} className="flex-1 flex items-center justify-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-sm text-[13px] font-medium transition-colors"><FiAward size={14}/> Piagam</button>
+                            </div>
                         </div>
                     </div>
                 )}
             </Modal>
 
-            <style>{`
-                @media print {
-                    .print\\:hidden { display: none !important; }
-                    body { margin: 0; padding: 0; background: white !important; }
-                    #certificate-print-area { 
-                        width: 100%; 
-                        height: auto; 
-                        border: 10px double #1E1B4B !important;
-                        position: static !important;
-                        margin: 0 !important;
-                    }
-                }
-            `}</style>
+            {/* Certificate Modal */}
+            <Modal show={isCertOpen} onClose={closeCert} maxWidth="4xl">
+                {selectedResponse && (
+                    <div className="bg-white rounded-sm overflow-hidden">
+                        <div className="print:hidden p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                            <h5 className="text-[13px] font-semibold text-slate-800 flex items-center gap-2"><FiAward className="text-amber-500"/> Preview Piagam</h5>
+                            <div className="flex gap-2">
+                                <button onClick={() => window.print()} className="flex items-center gap-1.5 bg-[#405189] text-white px-3 py-1.5 rounded-sm text-[12px] font-medium hover:bg-[#3a4a7d]"><FiPrinter size={13}/> Cetak</button>
+                                <button onClick={closeCert} className="text-slate-400 hover:text-slate-600 p-1"><FiX size={18}/></button>
+                            </div>
+                        </div>
+                        <div className="p-8 bg-white flex justify-center overflow-x-auto print:p-0">
+                            <div className="w-[800px] h-[560px] border-[12px] border-double border-slate-800 p-10 relative bg-white flex flex-col items-center justify-between text-slate-900 shrink-0">
+                                <div className="flex justify-between w-full items-center pb-6 border-b border-slate-200">
+                                    <img src="/1000492763-removebg-preview.png" alt="BKKBN" className="h-14 object-contain" />
+                                    <div className="text-center"><h2 className="text-xl font-bold uppercase tracking-tight">Survei Kepuasan Layanan</h2><p className="text-[10px] font-semibold text-amber-600 tracking-widest uppercase">Balai KB Argapura</p></div>
+                                    <img src="/Logogram-Warna.png" alt="Logo" className="h-12 object-contain" />
+                                </div>
+                                <div className="text-center flex-1 flex flex-col justify-center gap-3">
+                                    <h1 className="text-4xl font-serif">Piagam Penghargaan</h1>
+                                    <p className="text-sm text-slate-500 italic">Diberikan sebagai tanda terima kasih kepada :</p>
+                                    <h3 className="text-3xl font-bold uppercase tracking-tight border-b-2 border-amber-500 pb-1 inline-block mx-auto px-6">{selectedResponse.nama}</h3>
+                                    <p className="max-w-lg mx-auto text-xs leading-relaxed text-slate-500 mt-2">Terima kasih atas partisipasi aktif dalam Survei Kepuasan Masyarakat Balai KB Argapura.</p>
+                                </div>
+                                <div className="w-full flex justify-between items-end pt-6 border-t border-slate-200">
+                                    <div><p className="text-[9px] text-slate-400 font-semibold uppercase mb-1">ID</p><p className="text-xs font-mono font-bold">ARG-{selectedResponse.id}-{new Date(selectedResponse.created_at).getFullYear()}</p></div>
+                                    <div className="text-center"><div className="w-28 border-b border-slate-900 mb-2 mx-auto h-12"></div><p className="text-xs font-bold uppercase">Admin Balai KB</p></div>
+                                    <div className="text-right"><p className="text-xs font-semibold">{new Date(selectedResponse.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </Modal>
+
+            <style>{`@media print { .print\\:hidden, nav, header { display:none!important; } * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; } }`}</style>
         </AuthenticatedLayout>
     );
 }
