@@ -45,8 +45,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('teams', TeamController::class)->except(['create', 'show', 'edit']);
 
     // Reports
-    Route::get('reports', [ReportController::class, 'index'])->name('admin.reports.index');
-    Route::get('reports/full', [ReportController::class, 'full'])->name('admin.reports.full');
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/full', [ReportController::class, 'full'])->name('reports.full');
 });
 
 Route::middleware('auth')->group(function () {
