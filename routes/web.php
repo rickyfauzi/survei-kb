@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\LandingController;
@@ -42,6 +43,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Team Management
     Route::resource('teams', TeamController::class)->except(['create', 'show', 'edit']);
+
+    // Reports
+    Route::get('reports', [ReportController::class, 'index'])->name('admin.reports.index');
 });
 
 Route::middleware('auth')->group(function () {
