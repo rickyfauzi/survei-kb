@@ -143,6 +143,7 @@ const Icons = {
             {...props}
             d="M7 11V7a5 5 0 0 1 10 0v4M8 11h8a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"
         />
+    ),
     Share: (props) => (
         <Icon
             {...props}
