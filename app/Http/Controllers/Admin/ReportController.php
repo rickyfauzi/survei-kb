@@ -12,16 +12,44 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Monthly Respondents Statistics (Last 12 Months)
+        // 1. Monthly Respondents Statistics with Satisfaction Breakdown
         $monthlyStats = Response::select(
                 DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
                 DB::raw("COUNT(*) as total"),
                 DB::raw("AVG((SELECT AVG(score) FROM answers WHERE response_id = responses.id)) as avg_score")
             )
             ->groupBy('month')
-            ->orderBy('month', 'desc')
+            ->orderBy('month', 'asc')
             ->limit(12)
-            ->get();
+            ->get()
+            ->map(function($stat) {
+                // Count satisfaction categories for this month
+                $monthDate = $stat->month;
+                $responses = Response::where(DB::raw("DATE_FORMAT(created_at, '%Y-%m')"), $monthDate)->get();
+                
+                $sangatPuas = 0;
+                $puas = 0;
+                $cukup = 0;
+                $kurang = 0;
+
+                foreach($responses as $res) {
+                    $score = $res->average_score;
+                    if ($score >= 85) $sangatPuas++;
+                    elseif ($score >= 70) $puas++;
+                    elseif ($score >= 55) $cukup++;
+                    else $kurang++;
+                }
+
+                return [
+                    'month' => $monthDate,
+                    'total' => $stat->total,
+                    'avg' => round($stat->avg_score, 1),
+                    'sangatPuas' => $sangatPuas,
+                    'puas' => $puas,
+                    'cukup' => $cukup,
+                    'kurang' => $kurang,
+                ];
+            });
 
         // 2. Summary Statistics
         $totalResponden = Response::count();
