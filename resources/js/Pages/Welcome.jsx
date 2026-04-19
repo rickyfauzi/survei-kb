@@ -720,7 +720,7 @@ export default function Welcome({
             ════════════════════════════════════════════════════════ */}
             <section
                 id="beranda"
-                className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center pt-24 pb-12 md:pt-32 md:pb-16 overflow-hidden bg-white"
+                className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center pt-36 pb-12 md:pt-32 md:pb-16 overflow-hidden bg-white"
             >
                 {/* Background Grid Pattern with Pink/Indigo Glow */}
                 <div className="absolute inset-0 h-full w-full bg-white pointer-events-none">
@@ -728,7 +728,7 @@ export default function Welcome({
                     <div className="absolute left-0 right-0 top-0 m-auto h-[400px] w-[400px] rounded-full bg-indigo-400 opacity-20 blur-[120px]"></div>
                 </div>
 
-                <div className="relative z-10 w-full max-w-5xl mx-auto px-8 text-center mt-[-40px]">
+                <div className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center">
                     {/* Badge */}
                     <FadeUp>
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 sm:px-5 sm:py-2 mb-6 sm:mb-8 text-xs sm:text-sm font-medium border border-indigo-200/60 rounded-full text-indigo-600 bg-indigo-50/30 backdrop-blur-md">
@@ -764,7 +764,7 @@ export default function Welcome({
 
                     {/* Hero Title */}
                     <FadeUp delay={0.15}>
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.2] sm:leading-[1.1] tracking-tight text-balance">
+                        <h1 className="text-[26px] sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.3] sm:leading-[1.1] tracking-tight text-balance">
                             Wujudkan Keluarga Sejahtera dengan <br className="hidden sm:block" />
                             <span className="inline-flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-center mt-2 sm:mt-3">
                                 <span>Layanan KB</span>
