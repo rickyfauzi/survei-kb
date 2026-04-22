@@ -1,7 +1,14 @@
 import { Link } from "@inertiajs/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { FiMenu, FiX, FiMapPin, FiMail, FiPhone, FiInstagram } from "react-icons/fi";
+import {
+    FiMenu,
+    FiX,
+    FiMapPin,
+    FiMail,
+    FiPhone,
+    FiInstagram,
+} from "react-icons/fi";
 
 export default function Guest({ children }) {
     const [scrolled, setScrolled] = useState(false);
@@ -192,7 +199,9 @@ export default function Guest({ children }) {
                                 <div>
                                     <h3 className="font-extrabold text-xl text-slate-900 tracking-tight leading-none mb-1">
                                         Balai PKB{" "}
-                                        <span className="text-amber-600">Argapura</span>
+                                        <span className="text-amber-600">
+                                            Argapura
+                                        </span>
                                     </h3>
                                     <p className="text-[10px] font-bold text-amber-500 tracking-[0.3em] uppercase">
                                         Bangga Kencana
@@ -278,8 +287,7 @@ export default function Guest({ children }) {
                                         size={18}
                                     />
                                     <span>
-                                        Jl. Raya Kencana No. 12, Komplek
-                                        Perkantoran Terpadu, Indonesia 40001
+                                        JALAN RAYA SUKASARI KIDUL NOMOR 1 45462
                                     </span>
                                 </li>
                                 <li className="flex items-center gap-4">
@@ -287,14 +295,14 @@ export default function Guest({ children }) {
                                         className="text-amber-600 shrink-0"
                                         size={18}
                                     />
-                                    <span>+62 21-8899-7766</span>
+                                    <span> (0233) 8286872 </span>
                                 </li>
                                 <li className="flex items-center gap-4">
                                     <FiMail
                                         className="text-amber-600 shrink-0"
                                         size={18}
                                     />
-                                    <span>info@balaikb.go.id</span>
+                                    <span>argapuraoffice@gmail.com</span>
                                 </li>
                             </ul>
                         </div>
