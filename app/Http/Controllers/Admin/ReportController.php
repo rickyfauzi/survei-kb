@@ -112,14 +112,32 @@ class ReportController extends Controller
 
     private function getMonthlyStats()
     {
-        return Response::select(
-            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
-            DB::raw("COUNT(*) as total"),
-            DB::raw("AVG((SELECT AVG(score) FROM answers WHERE response_id = responses.id)) as avg_score")
-        )
-        ->groupBy('month')
-        ->orderBy('month', 'asc')
-        ->limit(12)
-        ->get();
+        $responses = Response::all();
+        $monthly = [];
+        
+        foreach($responses as $res) {
+            $month = $res->created_at->format('Y-m');
+            if (!isset($monthly[$month])) {
+                $monthly[$month] = ['month' => $month, 'total' => 0, 'sum_avg' => 0, 'sangatPuas' => 0, 'puas' => 0, 'cukup' => 0, 'kurang' => 0];
+            }
+            $avg = $res->average_score;
+            $monthly[$month]['total']++;
+            $monthly[$month]['sum_avg'] += $avg;
+            
+            if ($avg >= 85) $monthly[$month]['sangatPuas']++;
+            elseif ($avg >= 70) $monthly[$month]['puas']++;
+            elseif ($avg >= 55) $monthly[$month]['cukup']++;
+            else $monthly[$month]['kurang']++;
+        }
+        
+        $result = [];
+        foreach($monthly as $m) {
+            $m['avg'] = $m['total'] > 0 ? round($m['sum_avg'] / $m['total'], 1) : 0;
+            unset($m['sum_avg']);
+            $result[] = $m;
+        }
+        
+        usort($result, function($a, $b) { return strcmp($a['month'], $b['month']); });
+        return array_slice($result, -12);
     }
 }

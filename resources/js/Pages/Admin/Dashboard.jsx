@@ -4,7 +4,7 @@ import { FiUsers, FiBarChart2, FiTrendingUp, FiActivity, FiDownload, FiArrowUpRi
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function Dashboard({ auth, totalResponden, rataKepuasan, distribusi, perHari, perBulan, perQuestion }) {
-    const PIE_COLORS = ['#ef4444', '#f7b84b', '#0ab39c'];
+    const PIE_COLORS = ['#ef4444', '#f7b84b', '#405189', '#0ab39c'];
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -87,7 +87,7 @@ export default function Dashboard({ auth, totalResponden, rataKepuasan, distribu
                                     <PieChart>
                                         <Pie data={distribusi} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="total" nameKey="label" stroke="none">
                                             {distribusi.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.label === 'Tidak Memuaskan' ? PIE_COLORS[0] : entry.label === 'Cukup' ? PIE_COLORS[1] : PIE_COLORS[2]} />
+                                                <Cell key={`cell-${index}`} fill={entry.label === 'Kurang Puas' ? PIE_COLORS[0] : entry.label === 'Cukup' ? PIE_COLORS[1] : entry.label === 'Puas' ? PIE_COLORS[2] : PIE_COLORS[3]} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip contentStyle={{ border: '1px solid #e9ebec', borderRadius: '4px', fontSize: '12px' }} />
@@ -98,11 +98,11 @@ export default function Dashboard({ auth, totalResponden, rataKepuasan, distribu
                                     <span className="text-[10px] text-slate-400">Total</span>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-3 gap-2 mt-2 pt-3 border-t border-slate-100">
+                            <div className="grid grid-cols-2 gap-2 mt-2 pt-3 border-t border-slate-100">
                                 {distribusi.map((entry, idx) => (
                                     <div key={idx} className="text-center">
                                         <div className="flex items-center justify-center gap-1 mb-1">
-                                            <div className={`w-2 h-2 rounded-full ${entry.label === 'Tidak Memuaskan' ? 'bg-red-500' : entry.label === 'Cukup' ? 'bg-amber-400' : 'bg-teal-500'}`}></div>
+                                            <div className={`w-2 h-2 rounded-full ${entry.label === 'Kurang Puas' ? 'bg-red-500' : entry.label === 'Cukup' ? 'bg-amber-400' : entry.label === 'Puas' ? 'bg-indigo-500' : 'bg-teal-500'}`}></div>
                                             <span className="text-[10px] text-slate-500">{entry.label}</span>
                                         </div>
                                         <span className="text-sm font-semibold text-slate-700">{entry.total}</span>

@@ -141,6 +141,7 @@ export default function Reports({ monthlyStats, summary, responses, filters }) {
                                         { label: 'Sangat Puas', key: 'sangatPuas', color: 'bg-teal-500', text: 'text-teal-600' },
                                         { label: 'Puas', key: 'puas', color: 'bg-indigo-500', text: 'text-indigo-600' },
                                         { label: 'Cukup', key: 'cukup', color: 'bg-amber-400', text: 'text-amber-600' },
+                                        { label: 'Kurang', key: 'kurang', color: 'bg-red-500', text: 'text-red-600' },
                                     ].map(({ label, key, color, text }) => (
                                         <div key={key}>
                                             <div className="flex justify-between text-[11px] font-medium mb-1">

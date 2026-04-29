@@ -16,14 +16,15 @@ class DashboardController extends Controller
         $totalResponden = Response::count();
         $rataKepuasan = round(Answer::avg('score') ?? 0, 1);
 
-        $distribusi = Answer::select(
-            DB::raw("CASE
-                WHEN score BETWEEN 10 AND 30 THEN 'Tidak Memuaskan'
-                WHEN score BETWEEN 31 AND 60 THEN 'Cukup'
-                WHEN score BETWEEN 61 AND 100 THEN 'Sangat Memuaskan'
-            END as label"),
-            DB::raw('COUNT(*) as total')
-        )->groupBy('label')->get();
+        $distribusi = Response::get()->map(function($res) {
+            $score = $res->average_score;
+            if ($score >= 85) return 'Sangat Puas';
+            if ($score >= 70) return 'Puas';
+            if ($score >= 55) return 'Cukup';
+            return 'Kurang Puas';
+        })->countBy()->map(function($count, $label) {
+            return ['label' => $label, 'total' => $count];
+        })->values();
 
         $perHari = Response::select(
             DB::raw("DATE(created_at) as tanggal"),
