@@ -505,7 +505,7 @@ export default function Responses({ auth, responses, filters }) {
                                             Tanggal Terbit
                                         </p>
                                         <p className="text-xs font-semibold bg-amber-50 px-3 py-2 rounded-sm border border-amber-200">
-                                            {new Date(selectedResponse.created_at + 'T00:00:00Z').toLocaleDateString("id-ID", {
+                                            {new Date(selectedResponse.created_at).toLocaleDateString("id-ID", {
                                                 day: "numeric",
                                                 month: "long",
                                                 year: "numeric",
