@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { FiEye, FiTrash2, FiSearch, FiCalendar, FiMapPin, FiSmartphone, FiX, FiFilter, FiAward, FiPrinter, FiUsers, FiRefreshCw } from 'react-icons/fi';
+import { FiEye, FiTrash2, FiSearch, FiCalendar, FiMapPin, FiSmartphone, FiX, FiFilter, FiAward, FiPrinter, FiUsers, FiRefreshCw, FiDownload } from 'react-icons/fi';
 import Modal from '@/Components/Modal';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -428,6 +428,12 @@ export default function Responses({ auth, responses, filters }) {
                                     <FiPrinter size={13} /> Cetak
                                 </button>
                                 <button
+                                    onClick={() => window.print()}
+                                    className="flex items-center gap-1.5 bg-teal-600 text-white px-3 py-1.5 rounded-sm text-[12px] font-medium hover:bg-teal-700"
+                                >
+                                    <FiDownload size={13} /> Download
+                                </button>
+                                <button
                                     onClick={closeCert}
                                     className="text-slate-400 hover:text-slate-600 p-1"
                                 >
@@ -435,7 +441,7 @@ export default function Responses({ auth, responses, filters }) {
                                 </button>
                             </div>
                         </div>
-                        <div className="p-8 bg-white flex justify-center overflow-x-auto print:p-0">
+                        <div className="p-8 bg-white flex justify-center overflow-x-auto print:p-0 print-area">
                             <div className="w-[800px] h-[560px] border-[12px] border-double border-slate-800 p-10 relative bg-white flex flex-col items-center justify-between text-slate-900 shrink-0">
                                 <div className="flex justify-between w-full items-center pb-6 border-b border-slate-200">
                                     <img
@@ -475,28 +481,31 @@ export default function Responses({ auth, responses, filters }) {
                                     </p>
                                 </div>
                                 <div className="w-full flex justify-between items-end pt-6 border-t border-slate-200">
-                                    <div>
-                                        <p className="text-[9px] text-slate-400 font-semibold uppercase mb-1">
-                                            ID
+                                    <div className="flex flex-col items-start">
+                                        <p className="text-[9px] text-slate-400 font-semibold uppercase mb-1 tracking-widest">
+                                            Nomor Sertifikat
                                         </p>
-                                        <p className="text-xs font-mono font-bold">
-                                            ARG-{selectedResponse.id}-
-                                            {new Date(
-                                                selectedResponse.created_at,
-                                            ).getFullYear()}
-                                        </p>
+                                        <div className="bg-slate-100 px-3 py-2 rounded-sm border-l-4 border-amber-500">
+                                            <p className="text-xs font-mono font-bold text-slate-800">
+                                                ARG-{String(selectedResponse.id).padStart(4, '0')}-{new Date(selectedResponse.created_at).getFullYear()}
+                                            </p>
+                                        </div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="w-28 border-b border-slate-900 mb-2 mx-auto h-12"></div>
+                                        <div className="w-28 border-b-2 border-slate-900 mb-2 mx-auto h-12"></div>
                                         <p className="text-xs font-bold uppercase">
                                             ADE ABDUL ROSID, SP
                                         </p>
+                                        <p className="text-[8px] text-slate-400 uppercase tracking-wider">
+                                            Kepala Balai
+                                        </p>
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-xs font-semibold">
-                                            {new Date(
-                                                selectedResponse.created_at,
-                                            ).toLocaleDateString("id-ID", {
+                                    <div className="text-right flex flex-col items-end">
+                                        <p className="text-[9px] text-slate-400 font-semibold uppercase mb-1 tracking-widest">
+                                            Tanggal Terbit
+                                        </p>
+                                        <p className="text-xs font-semibold bg-amber-50 px-3 py-2 rounded-sm border border-amber-200">
+                                            {new Date(selectedResponse.created_at + 'T00:00:00Z').toLocaleDateString("id-ID", {
                                                 day: "numeric",
                                                 month: "long",
                                                 year: "numeric",
@@ -510,7 +519,17 @@ export default function Responses({ auth, responses, filters }) {
                 )}
             </Modal>
 
-            <style>{`@media print { .print\\:hidden, nav, header { display:none!important; } * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; } }`}</style>
+            <style>{`
+                @media print { 
+                    @page { size: landscape; margin: 0; }
+                    body { background: white !important; }
+                    .print\\:hidden, nav, header { display: none !important; } 
+                    .fixed.inset-0.bg-gray-500, .fixed.inset-0.bg-slate-900\\/50 { display: none !important; }
+                    .print-area { display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; height: 100vh !important; }
+                    .w-\\[800px\\] { transform: scale(1.2); transform-origin: center; }
+                    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } 
+                }
+            `}</style>
         </AuthenticatedLayout>
     );
 }
